@@ -1,10 +1,29 @@
-interface Product {
+export interface Product {
   id: string;
   title: string;
-  price: number;
+  price: number; // цена за единственный или минимальный вариант
   img?: string;
   description?: string;
   discount?: number;
+  variants?: ProductVariant[] //вариации одного продукта, напр - обьем сока
+  options?: ProductOption[] //допы, например соус или сырный бортик к пицце
+  tags?: ProductTags
+}
+type ProductVariant = {
+  id: string;
+  value: string;
+  priceModifier: number;
+  stock: number;
+}
+type ProductOption = {
+  id: string;
+  value: string;
+  priceModifier: number;
+  isEnable: boolean;
+}
+type ProductTags = {
+  name: string, //напр - Состав
+  tags: string[] // напр - [Моцарелла, горгонзола, пармезан, рикотта]
 }
 export interface MenuItem extends Product  {
   // id: string;

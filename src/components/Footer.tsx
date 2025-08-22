@@ -9,7 +9,7 @@ const Footer: FC<FooterProps> = ({ total }) => {
     <footer className="footer">
       <div className="summary">
         <span>Итого</span>
-        <strong>${total.toFixed(2)}</strong>
+        <strong>₽{total.toFixed(2)}</strong>
       </div>
     </footer>
   );

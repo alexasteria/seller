@@ -1,9 +1,9 @@
-import React, { FC } from 'react';
-import { MenuItem as MenuItemType } from '../../types';
+import React, {FC, useMemo, useState} from 'react';
+import {MenuItem as MenuItemType, Product} from '../../types';
 import { useExpandedCard } from '../../contexts/ExpandedCardContext';
 
 interface CardProps {
-  item: MenuItemType;
+  item: Product;
   quantity: number;
   onIncrement: (id: string) => void;
   onDecrement: (id: string) => void;
@@ -12,10 +12,19 @@ interface CardProps {
 const ClassicCard: FC<CardProps> = ({ item, quantity, onIncrement, onDecrement }) => {
   const { expandedCardId, setExpandedCardId } = useExpandedCard();
   const isExpanded = expandedCardId === item.id;
+  const [selectVariant, setSelectVariant] = useState(item.variants?.[0])
+  const price = useMemo(() => {
+    if (!selectVariant) return item.price
+    return item.price + selectVariant.priceModifier
+  },[selectVariant])
+  const discountPrice = useMemo(() => {
+    if (!item.discount) return price
+    return price * (1 - item.discount / 100)
+  },[price])
   return (
-    <div className={`card classic-card ${isExpanded ? 'expanded' : ''}`} onClick={() => setExpandedCardId(isExpanded ? null : item.id)}>
+    <div className={`card classic-card ${isExpanded ? 'expanded' : ''}`}>
       {!isExpanded && (
-        <div className="card-image-container">
+        <div className="card-image-container" onClick={() => setExpandedCardId(isExpanded ? null : item.id)}>
           {item.img && (
             <div className="card-image">
               <img
@@ -45,12 +54,12 @@ const ClassicCard: FC<CardProps> = ({ item, quantity, onIncrement, onDecrement }
               }}
             />
             <div className="card-expanded-overlay">
-              {item.popular && (
-                <div className="card-expanded-badge popular">
-                  <span className="badge-icon">👑</span>
-                  <span className="badge-text">Популярная</span>
-                </div>
-              )}
+              {/*{item.popular && (*/}
+              {/*  <div className="card-expanded-badge popular">*/}
+              {/*    <span className="badge-icon">👑</span>*/}
+              {/*    <span className="badge-text">Популярная</span>*/}
+              {/*  </div>*/}
+              {/*)}*/}
               {item.discount && (
                 <div className="card-expanded-badge discount">
                   <span className="badge-text">-{item.discount}%</span>
@@ -67,17 +76,18 @@ const ClassicCard: FC<CardProps> = ({ item, quantity, onIncrement, onDecrement }
             <div className="card-info">
               <div className="card-title-row">
                 <h3 className="card-title">{item.title}</h3>
-                <div className="card-tags">
-                  {item.popular && (
-                    <span className="card-tag popular" title="Популярная">👑</span>
-                  )}
-                  {item.spicy && (
-                    <span className="card-tag spicy" title="Острая">🌶️</span>
-                  )}
-                  {item.vegetarian && (
-                    <span className="card-tag vegetarian" title="Вегетарианская">🥬</span>
-                  )}
-                </div>
+                {/*//todo*/}
+                {/*<div className="card-tags">*/}
+                {/*  {item.popular && (*/}
+                {/*    <span className="card-tag popular" title="Популярная">👑</span>*/}
+                {/*  )}*/}
+                {/*  {item.spicy && (*/}
+                {/*    <span className="card-tag spicy" title="Острая">🌶️</span>*/}
+                {/*  )}*/}
+                {/*  {item.vegetarian && (*/}
+                {/*    <span className="card-tag vegetarian" title="Вегетарианская">🥬</span>*/}
+                {/*  )}*/}
+                {/*</div>*/}
               </div>
               {item.description && (
                 <div className="card-description">{item.description}</div>
@@ -86,11 +96,11 @@ const ClassicCard: FC<CardProps> = ({ item, quantity, onIncrement, onDecrement }
                 <div className="card-price">
                   {item.discount ? (
                     <>
-                      <span className="discounted-price">${(item.price * (1 - item.discount / 100)).toFixed(2)}</span>
-                      <span className="original-price">${item.price.toFixed(2)}</span>
+                      <span className="discounted-price">₽{discountPrice.toFixed(2)}</span>
+                      <span className="original-price">₽{price.toFixed(2)}</span>
                     </>
                   ) : (
-                    `$${item.price.toFixed(2)}`
+                    `₽${price.toFixed(2)}`
                   )}
                 </div>
                 {item.discount && (
@@ -128,26 +138,27 @@ const ClassicCard: FC<CardProps> = ({ item, quantity, onIncrement, onDecrement }
             <div className="card-expanded-header">
               <div className="card-expanded-title-section">
                 <h3 className="card-expanded-title">{item.title}</h3>
-                <div className="card-expanded-icons">
-                  {item.vegetarian && (
-                    <span className="card-expanded-icon veg" title="Вегетарианская">🥬</span>
-                  )}
-                  {item.spicy && (
-                    <span className="card-expanded-icon spicy" title="Острая">🌶️</span>
-                  )}
-                </div>
+                {/*//todo*/}
+                {/*<div className="card-expanded-icons">*/}
+                {/*  {item.vegetarian && (*/}
+                {/*    <span className="card-expanded-icon veg" title="Вегетарианская">🥬</span>*/}
+                {/*  )}*/}
+                {/*  {item.spicy && (*/}
+                {/*    <span className="card-expanded-icon spicy" title="Острая">🌶️</span>*/}
+                {/*  )}*/}
+                {/*</div>*/}
               </div>
               <div className="card-expanded-price-section">
                 <div className="card-expanded-price">
                   {item.discount ? (
-                    `$${(item.price * (1 - item.discount / 100)).toFixed(2)}`
+                    `₽${discountPrice.toFixed(2)}`
                   ) : (
-                    `$${item.price.toFixed(2)}`
+                    `₽${price.toFixed(2)}`
                   )}
                 </div>
                 {item.discount && (
                   <div className="card-expanded-original-price">
-                    ${item.price.toFixed(2)}
+                    ₽{price.toFixed(2)}
                   </div>
                 )}
               </div>
@@ -157,31 +168,40 @@ const ClassicCard: FC<CardProps> = ({ item, quantity, onIncrement, onDecrement }
               <p className="card-expanded-description">{item.description}</p>
             )}
 
-            {item.ingredients && (
+            {item.tags && (
               <div className="card-expanded-ingredients">
-                <div className="ingredients-title">Состав:</div>
+                <div className="ingredients-title">{item.tags.name}:</div>
                 <div className="ingredients-list">
-                  {item.ingredients.map((ingredient, index) => (
-                    <span key={index} className="ingredient-item">{ingredient}</span>
+                  {item.tags.tags.map((value, index) => (
+                    <span key={index} className="ingredient-item">{value}</span>
                   ))}
                 </div>
               </div>
             )}
 
-            <div className="card-expanded-details">
-              {item.weight && (
-                <div className="card-expanded-detail">
-                  <span className="detail-icon">📏</span>
-                  <span className="detail-text">{item.weight}</span>
-                </div>
-              )}
-              {item.cookingTime && (
-                <div className="card-expanded-detail">
-                  <span className="detail-icon">⏱️</span>
-                  <span className="detail-text">{item.cookingTime}</span>
-                </div>
-              )}
-            </div>
+            {/*<div className="card-expanded-details">*/}
+            {/*  {item.weight && (*/}
+            {/*    <div className="card-expanded-detail">*/}
+            {/*      <span className="detail-icon">📏</span>*/}
+            {/*      <span className="detail-text">{item.weight}</span>*/}
+            {/*    </div>*/}
+            {/*  )}*/}
+            {/*  {item.cookingTime && (*/}
+            {/*    <div className="card-expanded-detail">*/}
+            {/*      <span className="detail-icon">⏱️</span>*/}
+            {/*      <span className="detail-text">{item.cookingTime}</span>*/}
+            {/*    </div>*/}
+            {/*  )}*/}
+            {/*</div>*/}
+
+            <div style={{display: "flex", justifyContent: "space-between", padding: "8px 12px"}}>{
+                selectVariant && item.variants?.map(variant => {
+                  return <div className="ingredient-item" style={{display: "flex", gap: 4, alignItems: "center"}} onClick={() => setSelectVariant(variant)}>
+                    <input type="radio" id={variant.id} name={variant.id} value={variant.id} checked={selectVariant?.id === variant.id}/>
+                    <label htmlFor={variant.id}>{variant.value}</label>
+                  </div>
+                })
+            }</div>
 
             <div className="card-expanded-actions">
               {quantity > 0 ? (
@@ -208,8 +228,8 @@ const ClassicCard: FC<CardProps> = ({ item, quantity, onIncrement, onDecrement }
                   onClick={() => onIncrement(item.id)}
                   aria-label={`Добавить ${item.title}`}
                 >
-                  <span className="btn-text">Добавить в корзину</span>
-                  <span className="btn-icon">+</span>
+                  <span className="btn-text">В корзину за</span>
+                  <span className="btn-text">{discountPrice} ₽</span>
                 </button>
               )}
             </div>
