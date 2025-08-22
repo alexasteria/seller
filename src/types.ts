@@ -4,7 +4,7 @@ export type MenuItem = {
   price: number;
   img?: string;
   description?: string;
-  cardStyle?: 'classic' | 'modern' | 'minimal' | 'premium' | 'compact';
+  cardStyle?: 'classic' | 'premium';
   ingredients?: string[];
   spicy?: boolean;
   vegetarian?: boolean;

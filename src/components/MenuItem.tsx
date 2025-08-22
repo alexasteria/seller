@@ -1,10 +1,7 @@
 import React, { FC } from 'react';
 import { MenuItem as MenuItemType } from '../types';
 import ClassicCard from './cards/ClassicCard';
-import ModernCard from './cards/ModernCard';
-import MinimalCard from './cards/MinimalCard';
 import PremiumCard from './cards/PremiumCard';
-import CompactCard from './cards/CompactCard';
 
 interface MenuItemProps {
   item: MenuItemType;
@@ -24,14 +21,8 @@ const MenuItem: FC<MenuItemProps> = ({ item, quantity, onIncrement, onDecrement 
   };
 
   switch (cardStyle) {
-    case 'modern':
-      return <ModernCard {...cardProps} />;
-    case 'minimal':
-      return <MinimalCard {...cardProps} />;
     case 'premium':
       return <PremiumCard {...cardProps} />;
-    case 'compact':
-      return <CompactCard {...cardProps} />;
     default:
       return <ClassicCard {...cardProps} />;
   }
