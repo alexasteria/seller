@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import { MenuItem as MenuItemType } from '../types';
 import ClassicCard from './cards/ClassicCard';
-import PremiumCard from './cards/PremiumCard';
 
 interface MenuItemProps {
   item: MenuItemType;
@@ -11,21 +10,14 @@ interface MenuItemProps {
 }
 
 const MenuItem: FC<MenuItemProps> = ({ item, quantity, onIncrement, onDecrement }) => {
-  const cardStyle = item.cardStyle || 'classic';
-
-  const cardProps = {
-    item,
-    quantity,
-    onIncrement,
-    onDecrement
-  };
-
-  switch (cardStyle) {
-    case 'premium':
-      return <PremiumCard {...cardProps} />;
-    default:
-      return <ClassicCard {...cardProps} />;
-  }
+  return (
+    <ClassicCard
+      item={item}
+      quantity={quantity}
+      onIncrement={onIncrement}
+      onDecrement={onDecrement}
+    />
+  );
 };
 
 export default MenuItem;

@@ -788,10 +788,17 @@ body {
   background: var(--bg);
   border: 1px solid var(--sec-bg);
   border-radius: 16px;
-  padding: 16px;
+  padding: 0;
   margin: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  transition: all 0.3s ease;
+  transition: all 0.4s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.classic-card.expanded {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
 }
 
 .classic-card:hover {
@@ -799,13 +806,476 @@ body {
   box-shadow: 0 4px 16px rgba(0,0,0,0.15);
 }
 
-.classic-card .card-image {
+.classic-card .card-image-container {
   position: relative;
   width: 100%;
   height: 200px;
   border-radius: 12px;
   overflow: hidden;
   margin-bottom: 12px;
+  transition: height 0.4s ease;
+}
+
+.classic-card.expanded .card-image-container {
+  height: 280px;
+}
+
+/* Стили для развернутого изображения как в PremiumCard */
+.classic-card .card-expanded-image-container {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+  border-radius: 12px 12px 0 0;
+}
+
+.classic-card .card-expanded-image {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.classic-card .card-expanded-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.4s ease;
+}
+
+.classic-card:hover .card-expanded-image img {
+  transform: scale(1.02);
+}
+
+.classic-card .card-expanded-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.4) 100%);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 16px;
+}
+
+.classic-card .card-expanded-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  backdrop-filter: blur(15px);
+}
+
+.classic-card .card-expanded-badge.popular {
+  background: rgba(255, 215, 0, 0.9);
+  color: #000;
+}
+
+.classic-card .card-expanded-badge.discount {
+  background: rgba(255, 107, 107, 0.9);
+  color: white;
+}
+
+.classic-card .card-image {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.classic-card .card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.4s ease;
+}
+
+.classic-card:hover .card-image img {
+  transform: scale(1.05);
+}
+
+.classic-card.expanded .card-image img {
+  transform: scale(1.1);
+}
+
+.classic-card .card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  flex: 1;
+}
+
+.classic-card .card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.classic-card .card-price {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+
+.classic-card .card-description {
+  display: none;
+}
+
+.classic-card .card-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.classic-card .card-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.classic-card .card-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.classic-card .card-tags {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.classic-card .card-tag {
+  font-size: 14px;
+  padding: 2px;
+  border-radius: 4px;
+  background: var(--sec-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+}
+
+.classic-card .card-tag.popular {
+  background: rgba(255, 215, 0, 0.2);
+  color: #b8860b;
+}
+
+.classic-card .card-tag.spicy {
+  background: rgba(255, 107, 107, 0.2);
+  color: #ff6b6b;
+}
+
+.classic-card .card-tag.vegetarian {
+  background: rgba(76, 175, 80, 0.2);
+  color: #4caf50;
+}
+
+.classic-card .card-price-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.classic-card .card-price {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.classic-card .discounted-price {
+  font-size: 18px;
+  font-weight: 700;
+  color: #000;
+}
+
+.classic-card .original-price {
+  font-size: 14px;
+  color: var(--hint);
+  text-decoration: line-through;
+}
+
+.classic-card .card-discount-badge {
+  background: #ff6b6b;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.classic-card .card-actions {
+  flex-shrink: 0;
+  margin-top: 0;
+}
+
+/* Стили для разворачивания карточки */
+.classic-card .card-header-row {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.classic-card .card-header-row:hover {
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 8px;
+  padding: 4px;
+  margin: -4px;
+}
+
+.classic-card .card-expanded-content {
+  padding: 20px 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.classic-card .card-expanded-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.classic-card .card-expanded-title-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.classic-card .card-expanded-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+  color: var(--text);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.classic-card .card-expanded-icons {
+  display: flex;
+  gap: 6px;
+}
+
+.classic-card .card-expanded-icon {
+  font-size: 18px;
+  padding: 4px;
+  border-radius: 50%;
+  background: var(--sec-bg);
+}
+
+.classic-card .card-expanded-price-section {
+  text-align: right;
+}
+
+.classic-card .card-expanded-price {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.classic-card .card-expanded-original-price {
+  font-size: 16px;
+  color: var(--hint);
+  text-decoration: line-through;
+  margin-top: 2px;
+}
+
+.classic-card .card-expanded-description {
+  font-size: 14px;
+  color: var(--hint);
+  line-height: 1.5;
+  margin: 0 0 16px 0;
+}
+
+.classic-card .card-expanded-ingredients {
+  margin-bottom: 16px;
+}
+
+.classic-card .card-expanded-details {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.classic-card .card-expanded-detail {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--hint);
+}
+
+.classic-card .card-expanded-actions {
+  margin-top: auto;
+}
+
+.classic-card .card-expanded-counter {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--sec-bg);
+  border-radius: 8px;
+  padding: 4px;
+  justify-content: center;
+}
+
+.classic-card .card-expanded-btn {
+  min-width: 32px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 600;
+  background: #acb7f3;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.classic-card .card-expanded-qty {
+  min-width: 24px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--text);
+}
+
+.classic-card .card-expanded-add-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--button);
+  color: var(--button-text);
+  border: none;
+  border-radius: 24px;
+  padding: 12px 24px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  width: 100%;
+  justify-content: center;
+}
+
+.classic-card .card-expanded-add-btn:hover {
+  transform: scale(1.05);
+}
+
+.classic-card .btn-text {
+  font-size: 14px;
+}
+
+.classic-card .btn-icon {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.classic-card .card-ingredients {
+  margin-bottom: 16px;
+}
+
+.classic-card .ingredients-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.classic-card .ingredients-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.classic-card .ingredient-item {
+  background: var(--sec-bg);
+  color: var(--text);
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.classic-card .card-details {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.classic-card .card-detail {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--hint);
+}
+
+.classic-card .detail-icon {
+  font-size: 16px;
+}
+
+.classic-card .card-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-right: 8px;
+  margin-bottom: 8px;
+}
+
+.classic-card .card-badge.popular {
+  background: rgba(255, 215, 0, 0.2);
+  color: #b8860b;
+}
+
+.classic-card .card-badge.discount {
+  background: rgba(255, 107, 107, 0.2);
+  color: #ff6b6b;
+}
+
+.classic-card .badge-icon {
+  font-size: 14px;
+}
+
+/* Стили для кнопок в ClassicCard */
+.classic-card .btn {
+  padding: 8px 16px;
+  min-width: 80px;
+  font-size: 14px;
+}
+
+.classic-card .counter {
+  gap: 8px;
+}
+
+.classic-card .counter .btn {
+  width: 32px;
+  height: 32px;
+  font-size: 16px;
+}
+
+.classic-card .qty {
+  font-size: 14px;
+  min-width: 20px;
 }
 
 .classic-card .badge {
@@ -878,41 +1348,28 @@ body {
 
 /* Premium Card */
 .premium-card {
-  background: linear-gradient(145deg, var(--bg) 0%, var(--sec-bg) 50%, var(--bg) 100%);
-  border: 2px solid transparent;
-  border-radius: 24px;
+  background: var(--bg);
+  border: 1px solid var(--sec-bg);
+  border-radius: 16px;
   padding: 0;
   margin: 8px;
   overflow: hidden;
-  box-shadow: 0 12px 48px rgba(0,0,0,0.15);
-  transition: all 0.4s ease;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
   position: relative;
-}
-
-.premium-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
-  transform: translateX(-100%);
-  transition: transform 0.6s ease;
-}
-
-.premium-card:hover::before {
-  transform: translateX(100%);
+  display: flex;
+  flex-direction: column;
 }
 
 .premium-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
 }
 
 .premium-card .premium-image-container {
   position: relative;
-  height: 280px;
+  width: 100%;
+  height: 220px;
   overflow: hidden;
   border-radius: 12px 12px 0 0;
 }
@@ -921,19 +1378,20 @@ body {
   position: relative;
   width: 100%;
   height: 100%;
+  display: block;
 }
 
 .premium-card .premium-image img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   object-position: center;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   transition: transform 0.4s ease;
+  display: block;
 }
 
 .premium-card:hover .premium-image img {
-  transform: scale(1.08);
+  transform: scale(1.02);
 }
 
 .premium-card .premium-overlay {
@@ -972,6 +1430,9 @@ body {
 
 .premium-card .premium-content {
   padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .premium-card .premium-header {
@@ -1155,7 +1616,7 @@ body {
   }
   
   .premium-card .premium-image-container {
-    height: 220px;
+    height: 150px;
   }
   
   .premium-card .premium-content {
@@ -1171,15 +1632,197 @@ body {
   .classic-card,
   .premium-card {
     margin: 2px;
-    padding: 12px;
   }
   
-  .classic-card .card-image {
+  .classic-card {
+    flex-direction: row;
+    padding: 12px;
+    gap: 12px;
+  }
+  
+  .classic-card.expanded {
+    flex-direction: column;
+    padding: 0;
+    gap: 0;
+  }
+  
+  .classic-card .card-image-container {
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
+    margin-bottom: 0;
+    transition: height 0.4s ease;
+  }
+  
+  .classic-card.expanded .card-image-container {
     height: 120px;
   }
   
+  .classic-card .card-expanded-image-container {
+    height: 150px;
+  }
+  
+  .classic-card .card-expanded-overlay {
+    padding: 12px;
+  }
+  
+  .classic-card .card-expanded-badge {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+  
+  .classic-card .card-image {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .classic-card .card-content {
+    width: 100%;
+    padding: 0 12px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .classic-card .card-header-row {
+    flex-direction: row;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  
+  .classic-card .card-info {
+    gap: 2px;
+    flex: 1;
+  }
+  
+  .classic-card .card-title-row {
+    gap: 6px;
+  }
+  
+  .classic-card .card-tags {
+    gap: 3px;
+  }
+  
+  .classic-card .card-tag {
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+  }
+  
+  .classic-card .card-price-row {
+    gap: 6px;
+  }
+  
+  .classic-card .discounted-price {
+    font-size: 16px;
+  }
+  
+  .classic-card .original-price {
+    font-size: 12px;
+  }
+  
+  .classic-card .card-discount-badge {
+    padding: 1px 5px;
+    font-size: 10px;
+  }
+  
+  .classic-card .card-expanded-content {
+    padding: 16px 0;
+  }
+  
+  .classic-card .card-expanded-title {
+    font-size: 18px;
+  }
+  
+  .classic-card .card-expanded-price {
+    font-size: 20px;
+  }
+  
+  .classic-card .card-expanded-description {
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+  
+  .classic-card .card-expanded-details {
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  
+  .classic-card .card-expanded-detail {
+    font-size: 12px;
+  }
+  
+  .classic-card .card-ingredients {
+    margin-bottom: 12px;
+  }
+  
+  .classic-card .ingredients-list {
+    gap: 4px;
+  }
+  
+  .classic-card .ingredient-item {
+    padding: 3px 6px;
+    font-size: 11px;
+  }
+  
+  .classic-card .card-details {
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  
+  .classic-card .card-detail {
+    font-size: 12px;
+  }
+  
+  .classic-card .card-title {
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+  
+  .classic-card .card-description {
+    font-size: 12px;
+    color: var(--hint);
+    margin-bottom: 6px;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    display: block;
+  }
+  
+  .classic-card .card-price {
+    font-size: 16px;
+  }
+  
+  .classic-card .card-actions {
+    margin-top: 0;
+  }
+  
+  .classic-card .btn {
+    padding: 6px 10px;
+    min-width: 50px;
+    font-size: 11px;
+  }
+  
+  .classic-card .counter {
+    gap: 3px;
+  }
+  
+  .classic-card .counter .btn {
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+  }
+  
+  .classic-card .qty {
+    font-size: 11px;
+    min-width: 12px;
+  }
+  
   .premium-card .premium-image-container {
-    height: 180px;
+    height: 150px;
   }
   
   .premium-card .premium-content {
@@ -1193,6 +1836,10 @@ body {
   .classic-card .card-title,
   .premium-card .premium-title {
     font-size: 14px;
+  }
+  
+  .classic-card .card-price {
+    font-size: 16px;
   }
   
   .classic-card .card-description,
@@ -1222,11 +1869,209 @@ body {
   .classic-card,
   .premium-card {
     margin: 1px;
+  }
+  
+  .classic-card {
+    flex-direction: row;
+    padding: 8px;
+    gap: 8px;
+  }
+  
+  .classic-card.expanded {
+    flex-direction: column;
+    padding: 0;
+    gap: 0;
+  }
+  
+  .classic-card .card-image-container {
+    width: 70px;
+    height: 70px;
+    flex-shrink: 0;
+    margin-bottom: 0;
+    transition: height 0.4s ease;
+  }
+  
+  .classic-card.expanded .card-image-container {
+    height: 100px;
+  }
+  
+  .classic-card .card-expanded-image-container {
+    height: 120px;
+  }
+  
+  .classic-card .card-expanded-overlay {
     padding: 8px;
   }
   
+  .classic-card .card-expanded-badge {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+  
   .classic-card .card-image {
-    height: 100px;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .classic-card .card-content {
+    padding: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .classic-card .card-header-row {
+    flex-direction: row;
+    gap: 6px;
+    align-items: flex-start;
+  }
+  
+  .classic-card .card-info {
+    gap: 1px;
+    flex: 1;
+  }
+  
+  .classic-card .card-title-row {
+    gap: 4px;
+  }
+  
+  .classic-card .card-tags {
+    gap: 2px;
+  }
+  
+  .classic-card .card-tag {
+    font-size: 11px;
+    width: 16px;
+    height: 16px;
+  }
+  
+  .classic-card .card-price-row {
+    gap: 4px;
+  }
+  
+  .classic-card .discounted-price {
+    font-size: 14px;
+  }
+  
+  .classic-card .original-price {
+    font-size: 11px;
+  }
+  
+  .classic-card .card-discount-badge {
+    padding: 1px 4px;
+    font-size: 9px;
+  }
+  
+  .classic-card .card-expanded-content {
+    padding-top: 8px;
+  }
+  
+  .classic-card .card-ingredients {
+    margin-bottom: 8px;
+  }
+  
+  .classic-card .ingredients-title {
+    font-size: 12px;
+    margin-bottom: 6px;
+  }
+  
+  .classic-card .ingredients-list {
+    gap: 3px;
+  }
+  
+  .classic-card .ingredient-item {
+    padding: 2px 5px;
+    font-size: 10px;
+  }
+  
+  .classic-card .card-details {
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  
+  .classic-card .card-detail {
+    font-size: 11px;
+  }
+  
+  .classic-card .card-badge {
+    padding: 4px 8px;
+    font-size: 10px;
+    margin-right: 6px;
+    margin-bottom: 6px;
+  }
+  
+  .classic-card .card-expanded-content {
+    padding: 12px 0;
+  }
+  
+  .classic-card .card-expanded-title {
+    font-size: 16px;
+  }
+  
+  .classic-card .card-expanded-price {
+    font-size: 18px;
+  }
+  
+  .classic-card .card-expanded-description {
+    font-size: 12px;
+    margin-bottom: 10px;
+  }
+  
+  .classic-card .card-expanded-details {
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  
+  .classic-card .card-expanded-detail {
+    font-size: 11px;
+  }
+  
+  .classic-card .card-title {
+    font-size: 13px;
+    margin-bottom: 3px;
+  }
+  
+  .classic-card .card-description {
+    font-size: 11px;
+    color: var(--hint);
+    margin-bottom: 4px;
+    line-height: 1.2;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    display: block;
+  }
+  
+  .classic-card .card-price {
+    font-size: 15px;
+    margin-bottom: 6px;
+  }
+  
+  .classic-card .card-actions {
+    margin-top: 0;
+  }
+  
+  .classic-card .btn {
+    padding: 5px 8px;
+    min-width: 45px;
+    font-size: 10px;
+  }
+  
+  .classic-card .counter {
+    gap: 2px;
+  }
+  
+  .classic-card .counter .btn {
+    width: 22px;
+    height: 22px;
+    font-size: 11px;
+  }
+  
+  .classic-card .qty {
+    font-size: 10px;
+    min-width: 10px;
   }
   
   .premium-card .premium-image-container {
@@ -1236,6 +2081,10 @@ body {
   .classic-card .card-title,
   .premium-card .premium-title {
     font-size: 13px;
+  }
+  
+  .classic-card .card-price {
+    font-size: 15px;
   }
   
   .classic-card .card-description,
