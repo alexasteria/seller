@@ -4,6 +4,14 @@ export type MenuItem = {
   price: number;
   img?: string;
   description?: string;
+  cardStyle?: 'classic' | 'modern' | 'minimal' | 'premium' | 'compact';
+  ingredients?: string[];
+  spicy?: boolean;
+  vegetarian?: boolean;
+  popular?: boolean;
+  discount?: number;
+  weight?: string;
+  cookingTime?: string;
 };
 
 export type CartState = Record<string, number>;

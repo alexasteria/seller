@@ -1,5 +1,10 @@
 import React, { FC } from 'react';
 import { MenuItem as MenuItemType } from '../types';
+import ClassicCard from './cards/ClassicCard';
+import ModernCard from './cards/ModernCard';
+import MinimalCard from './cards/MinimalCard';
+import PremiumCard from './cards/PremiumCard';
+import CompactCard from './cards/CompactCard';
 
 interface MenuItemProps {
   item: MenuItemType;
@@ -9,59 +14,27 @@ interface MenuItemProps {
 }
 
 const MenuItem: FC<MenuItemProps> = ({ item, quantity, onIncrement, onDecrement }) => {
-  return (
-    <div className="card">
-      {item.img && (
-        <div className="card-image">
-          <img 
-            src={item.img} 
-            alt={item.title}
-            loading="lazy"
-            onError={(e) => {
-              const target = e.target as HTMLImageElement;
-              target.style.display = 'none';
-            }}
-          />
-        </div>
-      )}
-      <div className="card-body">
-        <div className="card-title">{item.title}</div>
-        {item.description && (
-          <div className="card-description">{item.description}</div>
-        )}
-        <div className="price">${item.price.toFixed(2)}</div>
-      </div>
-      <div className="card-actions">
-        {quantity > 0 ? (
-          <div className="counter">
-            <button 
-              className="btn" 
-              onClick={() => onDecrement(item.id)}
-              aria-label="Уменьшить количество"
-            >
-              −
-            </button>
-            <span className="qty">{quantity}</span>
-            <button 
-              className="btn" 
-              onClick={() => onIncrement(item.id)}
-              aria-label="Увеличить количество"
-            >
-              +
-            </button>
-          </div>
-        ) : (
-          <button 
-            className="btn primary" 
-            onClick={() => onIncrement(item.id)}
-            aria-label={`Добавить ${item.title}`}
-          >
-            Добавить
-          </button>
-        )}
-      </div>
-    </div>
-  );
+  const cardStyle = item.cardStyle || 'classic';
+
+  const cardProps = {
+    item,
+    quantity,
+    onIncrement,
+    onDecrement
+  };
+
+  switch (cardStyle) {
+    case 'modern':
+      return <ModernCard {...cardProps} />;
+    case 'minimal':
+      return <MinimalCard {...cardProps} />;
+    case 'premium':
+      return <PremiumCard {...cardProps} />;
+    case 'compact':
+      return <CompactCard {...cardProps} />;
+    default:
+      return <ClassicCard {...cardProps} />;
+  }
 };
 
 export default MenuItem;
