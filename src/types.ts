@@ -1,15 +1,23 @@
-export type MenuItem = {
+interface Product {
   id: string;
   title: string;
   price: number;
   img?: string;
   description?: string;
+  discount?: number;
+}
+export interface MenuItem extends Product  {
+  // id: string;
+  // title: string;
+  // price: number;
+  // img?: string;
+  // description?: string;
   cardStyle?: 'classic' | 'premium';
   ingredients?: string[];
   spicy?: boolean;
   vegetarian?: boolean;
   popular?: boolean;
-  discount?: number;
+  // discount?: number;
   weight?: string;
   cookingTime?: string;
 };

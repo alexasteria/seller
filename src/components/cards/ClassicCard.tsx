@@ -13,13 +13,13 @@ const ClassicCard: FC<CardProps> = ({ item, quantity, onIncrement, onDecrement }
   const { expandedCardId, setExpandedCardId } = useExpandedCard();
   const isExpanded = expandedCardId === item.id;
   return (
-    <div className={`card classic-card ${isExpanded ? 'expanded' : ''}`}>
+    <div className={`card classic-card ${isExpanded ? 'expanded' : ''}`} onClick={() => setExpandedCardId(isExpanded ? null : item.id)}>
       {!isExpanded && (
         <div className="card-image-container">
           {item.img && (
             <div className="card-image">
-              <img 
-                src={item.img} 
+              <img
+                src={item.img}
                 alt={item.title}
                 loading="lazy"
                 onError={(e) => {
@@ -31,12 +31,12 @@ const ClassicCard: FC<CardProps> = ({ item, quantity, onIncrement, onDecrement }
           )}
         </div>
       )}
-      
+
       {isExpanded && item.img && (
         <div className="card-expanded-image-container">
           <div className="card-expanded-image">
-            <img 
-              src={item.img} 
+            <img
+              src={item.img}
               alt={item.title}
               loading="lazy"
               onError={(e) => {
@@ -60,10 +60,10 @@ const ClassicCard: FC<CardProps> = ({ item, quantity, onIncrement, onDecrement }
           </div>
         </div>
       )}
-      
+
       <div className="card-content">
         {!isExpanded && (
-          <div className="card-header-row" onClick={() => setExpandedCardId(isExpanded ? null : item.id)}>
+          <div className="card-header-row">
             <div className="card-info">
               <div className="card-title-row">
                 <h3 className="card-title">{item.title}</h3>
@@ -101,16 +101,16 @@ const ClassicCard: FC<CardProps> = ({ item, quantity, onIncrement, onDecrement }
             <div className="card-actions" onClick={(e) => e.stopPropagation()}>
               {quantity > 0 && (
                 <div className="counter">
-                  <button 
-                    className="btn" 
+                  <button
+                    className="btn"
                     onClick={() => onDecrement(item.id)}
                     aria-label="Уменьшить количество"
                   >
                     −
                   </button>
                   <span className="qty">{quantity}</span>
-                  <button 
-                    className="btn" 
+                  <button
+                    className="btn"
                     onClick={() => onIncrement(item.id)}
                     aria-label="Увеличить количество"
                   >
@@ -121,7 +121,7 @@ const ClassicCard: FC<CardProps> = ({ item, quantity, onIncrement, onDecrement }
             </div>
           </div>
         )}
-        
+
         {/* Расширенное содержимое как в PremiumCard */}
         {isExpanded && (
           <div className="card-expanded-content">
@@ -186,16 +186,16 @@ const ClassicCard: FC<CardProps> = ({ item, quantity, onIncrement, onDecrement }
             <div className="card-expanded-actions">
               {quantity > 0 ? (
                 <div className="card-expanded-counter">
-                  <button 
-                    className="card-expanded-btn" 
+                  <button
+                    className="card-expanded-btn"
                     onClick={() => onDecrement(item.id)}
                     aria-label="Уменьшить количество"
                   >
                     −
                   </button>
                   <span className="card-expanded-qty">{quantity}</span>
-                  <button 
-                    className="card-expanded-btn" 
+                  <button
+                    className="card-expanded-btn"
                     onClick={() => onIncrement(item.id)}
                     aria-label="Увеличить количество"
                   >
@@ -203,8 +203,8 @@ const ClassicCard: FC<CardProps> = ({ item, quantity, onIncrement, onDecrement }
                   </button>
                 </div>
               ) : (
-                <button 
-                  className="card-expanded-add-btn" 
+                <button
+                  className="card-expanded-add-btn"
                   onClick={() => onIncrement(item.id)}
                   aria-label={`Добавить ${item.title}`}
                 >
