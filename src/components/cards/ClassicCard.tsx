@@ -22,71 +22,40 @@ const ClassicCard: FC<CardProps> = ({ item, quantity, onIncrement, onDecrement }
               target.style.display = 'none';
             }}
           />
-          {item.popular && (
-            <div className="badge popular">Популярная</div>
-          )}
-          {item.discount && (
-            <div className="badge discount">-{item.discount}%</div>
-          )}
         </div>
       )}
-      <div className="card-body">
-        <div className="card-header">
-          <div className="card-title">{item.title}</div>
-          {item.spicy && <span className="spicy-icon">🌶️</span>}
-          {item.vegetarian && <span className="veg-icon">🥬</span>}
-        </div>
-        {item.description && (
-          <div className="card-description">{item.description}</div>
-        )}
-        {item.ingredients && (
-          <div className="ingredients">
-            {item.ingredients.slice(0, 3).join(', ')}
-            {item.ingredients.length > 3 && '...'}
-          </div>
-        )}
-        <div className="card-footer">
-          <div className="price">
-            {item.discount ? (
-              <>
-                <span className="discounted-price">${(item.price * (1 - item.discount / 100)).toFixed(2)}</span>
-                <span className="original-price">${item.price.toFixed(2)}</span>
-              </>
-            ) : (
-              `$${item.price.toFixed(2)}`
-            )}
-          </div>
-          {item.weight && <div className="weight">{item.weight}</div>}
-        </div>
-      </div>
-      <div className="card-actions">
-        {quantity > 0 ? (
-          <div className="counter">
+      <div className="card-content">
+        <h3 className="card-title">{item.title}</h3>
+        <div className="card-price">${item.price.toFixed(2)}</div>
+        <div className="card-actions">
+          {quantity > 0 ? (
+            <div className="counter">
+              <button 
+                className="btn" 
+                onClick={() => onDecrement(item.id)}
+                aria-label="Уменьшить количество"
+              >
+                −
+              </button>
+              <span className="qty">{quantity}</span>
+              <button 
+                className="btn" 
+                onClick={() => onIncrement(item.id)}
+                aria-label="Увеличить количество"
+              >
+                +
+              </button>
+            </div>
+          ) : (
             <button 
-              className="btn" 
-              onClick={() => onDecrement(item.id)}
-              aria-label="Уменьшить количество"
-            >
-              −
-            </button>
-            <span className="qty">{quantity}</span>
-            <button 
-              className="btn" 
+              className="btn primary" 
               onClick={() => onIncrement(item.id)}
-              aria-label="Увеличить количество"
+              aria-label={`Добавить ${item.title}`}
             >
-              +
+              Добавить
             </button>
-          </div>
-        ) : (
-          <button 
-            className="btn primary" 
-            onClick={() => onIncrement(item.id)}
-            aria-label={`Добавить ${item.title}`}
-          >
-            Добавить
-          </button>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
