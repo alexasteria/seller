@@ -1,37 +1,36 @@
 export interface Product {
   id: string;
   title: string;
-  price: number; // цена за единственный или минимальный вариант
   img?: string;
   description?: string;
   discount?: number;
-  variants?: ProductVariant[] //вариации одного продукта, напр - обьем сока
-  options?: ProductOption[] //допы, например соус или сырный бортик к пицце
-  tags?: ProductTags
+  variants: ProductVariant[]; //вариации одного продукта, напр - обьем сока, минимум 1
+  options?: ProductOption[]; //допы, например соус или сырный бортик к пицце
+  tags?: ProductTags;
 }
 export type ProductVariant = {
   id: string;
   value: string;
-  priceModifier: number;
+  cost: number;
   stock: number;
-}
+};
 type ProductOption = {
   id: string;
   value: string;
   priceModifier: number;
   isEnable: boolean;
-}
+};
 type ProductTags = {
-  name: string, //напр - Состав
-  tags: string[] // напр - [Моцарелла, горгонзола, пармезан, рикотта]
-}
-export interface MenuItem extends Product  {
+  name: string; //напр - Состав
+  tags: string[]; // напр - [Моцарелла, горгонзола, пармезан, рикотта]
+};
+export interface MenuItem extends Product {
   // id: string;
   // title: string;
   // price: number;
   // img?: string;
   // description?: string;
-  cardStyle?: 'classic' | 'premium';
+  cardStyle?: "classic" | "premium";
   ingredients?: string[];
   spicy?: boolean;
   vegetarian?: boolean;
@@ -39,7 +38,7 @@ export interface MenuItem extends Product  {
   // discount?: number;
   weight?: string;
   cookingTime?: string;
-};
+}
 
 export type CartState = Record<string, number>;
 
@@ -52,7 +51,7 @@ export type OrderItem = {
 };
 
 export type OrderPayload = {
-  action: 'checkout';
+  action: "checkout";
   items: OrderItem[];
   total: number;
   currency: string;

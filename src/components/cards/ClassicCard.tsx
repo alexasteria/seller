@@ -20,8 +20,7 @@ const ClassicCard: FC<CardProps> = ({
   const isExpanded = expandedCardId === item.id;
   const [selectVariant, setSelectVariant] = useState(item.variants?.[0]);
   const price = useMemo(() => {
-    if (!selectVariant) return item.price;
-    return item.price + selectVariant.priceModifier;
+    return selectVariant?.cost ?? 99999;
   }, [selectVariant]);
   const discountPrice = useMemo(() => {
     if (!item.discount) return price;
@@ -106,7 +105,8 @@ const ClassicCard: FC<CardProps> = ({
                   {item.discount ? (
                     <>
                       <span className="discounted-price">
-                        ₽{discountPrice.toFixed(2)}
+                        {item.variants?.length > 1 && "от "}₽
+                        {discountPrice.toFixed(2)}
                       </span>
                       <span className="original-price">
                         ₽{price.toFixed(2)}
