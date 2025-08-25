@@ -20,10 +20,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     () =>
       Object.entries(cart).reduce((sum, [id, variantState]) => {
         const item = MENU.find((m) => m.id === id);
+        if (!item) return sum;
         let currentItemPrice = 0;
         Object.entries(variantState).forEach(([variantID, count]) => {
           const currentVariantPrice =
-            item.variants.find((v) => v.id === variantID)?.cost * 100 ?? 0;
+            (item.variants.find((v) => v.id === variantID)?.cost ?? 0) * 100 ||
+            0;
           const discountPrice = item.discount
             ? currentVariantPrice * (1 - item.discount / 100)
             : currentVariantPrice * count;

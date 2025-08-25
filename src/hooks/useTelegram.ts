@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { CartState, OrderPayload, DeliveryInfo } from "../types";
+import { CartState, OrderPayload, DeliveryInfo, OrderItem } from "../types";
 import { MENU } from "../data/menu";
 
 const tg = (window as any).Telegram?.WebApp;
@@ -49,15 +49,15 @@ export function useTelegramUi(
       // На странице доставки - подтверждаем заказ
       setIsSubmitting(true);
 
-      const items = Object.entries(cart)
-        .map(([id, qty]) => {
+      const items: OrderItem[] = Object.entries(cart)
+        .map(([id, variantState]) => {
           const item = MENU.find((m) => m.id === id);
           if (!item) return null;
           return {
             id: item.id,
             title: item.title,
             price: 999999,
-            quantity: qty,
+            quantity: 1,
             description: item.description,
           };
         })
