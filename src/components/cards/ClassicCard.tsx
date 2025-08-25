@@ -124,27 +124,27 @@ const ClassicCard: FC<CardProps> = ({
                 )}
               </div>
             </div>
-            <div className="card-actions" onClick={(e) => e.stopPropagation()}>
-              {quantity > 0 && (
-                <div className="counter">
-                  <button
-                    className="btn"
-                    onClick={() => onDecrement(item, selectVariant.id)}
-                    aria-label="Уменьшить количество"
-                  >
-                    −
-                  </button>
-                  <span className="qty">{quantity}</span>
-                  <button
-                    className="btn"
-                    onClick={() => onIncrement(item, selectVariant.id)}
-                    aria-label="Увеличить количество"
-                  >
-                    +
-                  </button>
-                </div>
-              )}
-            </div>
+            {/*<div className="card-actions" onClick={(e) => e.stopPropagation()}>*/}
+            {/*  {quantity > 0 && (*/}
+            {/*    <div className="counter">*/}
+            {/*      <button*/}
+            {/*        className="btn"*/}
+            {/*        onClick={() => onDecrement(item, selectVariant.id)}*/}
+            {/*        aria-label="Уменьшить количество"*/}
+            {/*      >*/}
+            {/*        −*/}
+            {/*      </button>*/}
+            {/*      <span className="qty">{quantity}</span>*/}
+            {/*      <button*/}
+            {/*        className="btn"*/}
+            {/*        onClick={() => onIncrement(item, selectVariant.id)}*/}
+            {/*        aria-label="Увеличить количество"*/}
+            {/*      >*/}
+            {/*        +*/}
+            {/*      </button>*/}
+            {/*    </div>*/}
+            {/*  )}*/}
+            {/*</div>*/}
           </div>
         )}
 

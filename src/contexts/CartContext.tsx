@@ -58,14 +58,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           [variantID]: (variantCount[variantID] ?? 0) - 1,
         },
       };
-      // const next = { ...prev };
-      // const item = next[product.id];
-      // if ((item[variantID] ?? 0) > 1) {
-      //   item[variantID] = item[variantID] - 1;
-      // } else {
-      //   delete item[variantID];
-      // }
-      // return next;
     });
 
   const clearCart = () => setCart({});
