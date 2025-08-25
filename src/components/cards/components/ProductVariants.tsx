@@ -11,7 +11,7 @@ const ProductVariants: FC<{
     <div
       style={{
         display: "flex",
-        justifyContent: "space-between",
+        justifyContent: "space-around",
         padding: "12px",
       }}
     >

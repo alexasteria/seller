@@ -35,12 +35,14 @@ const ClassicCard: FC<CardProps> = ({
     }, 0);
   }, [variantState]);
   return (
-    <div className={`card classic-card ${isExpanded ? "expanded" : ""}`}>
+    <div
+      className={`card classic-card ${isExpanded ? "expanded" : ""}`}
+      onClick={() =>
+        !isExpanded ? setExpandedCardId(isExpanded ? null : item.id) : undefined
+      }
+    >
       {!isExpanded && (
-        <div
-          className="card-image-container"
-          onClick={() => setExpandedCardId(isExpanded ? null : item.id)}
-        >
+        <div className="card-image-container">
           {item.img && (
             <div className="card-image">
               <img
