@@ -3,7 +3,7 @@ import { ProductVariant } from "../../../types";
 
 const ProductVariants: FC<{
   variants?: ProductVariant[];
-  setSelectVariant: (v?: ProductVariant) => void;
+  setSelectVariant: (v: ProductVariant) => void;
   selected?: string;
 }> = ({ variants, setSelectVariant, selected }) => {
   return (
