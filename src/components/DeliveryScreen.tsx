@@ -1,7 +1,8 @@
-import React, { FC, useState, useEffect } from 'react';
-import { DeliveryAddress, CourierService, DeliveryInfo } from '../types';
-import DeliveryAddressForm from './DeliveryAddressForm';
-import CourierSelection from './CourierSelection';
+import React, { FC, useState, useEffect } from "react";
+import { DeliveryAddress, CourierService, DeliveryInfo } from "../types";
+import DeliveryAddressForm from "./DeliveryAddressForm";
+import CourierSelection from "./CourierSelection";
+import { useCart } from "../contexts/CartContext";
 
 interface DeliveryScreenProps {
   subtotal: number;
@@ -10,25 +11,32 @@ interface DeliveryScreenProps {
   onDeliveryInfoChange?: (deliveryInfo: DeliveryInfo | null) => void;
 }
 
-const DeliveryScreen: FC<DeliveryScreenProps> = ({ 
-  subtotal, 
-  onBack, 
-  onConfirm, 
-  onDeliveryInfoChange 
+const DeliveryScreen: FC<DeliveryScreenProps> = ({
+  subtotal,
+  onBack,
+  onConfirm,
+  onDeliveryInfoChange,
 }) => {
+  const { cartMap, cart } = useCart();
   const [address, setAddress] = useState<DeliveryAddress>({
-    city: '',
-    street: '',
-    house: '',
-    apartment: '',
-    entrance: '',
-    floor: '',
-    comment: ''
+    city: "",
+    street: "",
+    house: "",
+    apartment: "",
+    entrance: "",
+    floor: "",
+    comment: "",
   });
-  
-  const [selectedCourier, setSelectedCourier] = useState<CourierService | null>(null);
 
-  const isFormValid = address.city.trim() && address.street.trim() && address.house.trim() && selectedCourier;
+  const [selectedCourier, setSelectedCourier] = useState<CourierService | null>(
+    null,
+  );
+
+  const isFormValid =
+    address.city.trim() &&
+    address.street.trim() &&
+    address.house.trim() &&
+    selectedCourier;
 
   // Обновляем информацию о доставке для Telegram
   useEffect(() => {
@@ -36,7 +44,7 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({
       const deliveryInfo: DeliveryInfo = {
         address,
         courier: selectedCourier,
-        totalWithDelivery: subtotal + selectedCourier.price
+        totalWithDelivery: subtotal + selectedCourier.price,
       };
       onDeliveryInfoChange(deliveryInfo);
     } else if (onDeliveryInfoChange) {
@@ -46,13 +54,13 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({
 
   const handleConfirm = () => {
     if (!isFormValid || !selectedCourier) return;
-    
+
     const deliveryInfo: DeliveryInfo = {
       address,
       courier: selectedCourier,
-      totalWithDelivery: subtotal + selectedCourier.price
+      totalWithDelivery: subtotal + selectedCourier.price,
     };
-    
+
     onConfirm(deliveryInfo);
   };
 
@@ -65,12 +73,40 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({
         <h2>Доставка</h2>
       </header>
 
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        {Object.entries(cart).map(([productID, variants]) => {
+          const item = cartMap.get(productID)!;
+          return (
+            <div style={{ padding: "4px 0", display: "flex", gap: 12 }}>
+              <img src={item.img} style={{ width: 50, height: 50 }} />
+              <div>
+                <div>{item.title}</div>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    gap: 8,
+                  }}
+                >
+                  {Object.entries(variants).map(([variantID, count]) => {
+                    const v = item.variants.find((v) => v.id === variantID);
+                    if (!v) throw Error("wrong variants");
+                    return (
+                      <div>
+                        {v.value} x {count}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
       <div className="delivery-content">
-        <DeliveryAddressForm 
-          address={address}
-          onChange={setAddress}
-        />
-        
+        <DeliveryAddressForm address={address} onChange={setAddress} />
+
         <CourierSelection
           selectedCourier={selectedCourier}
           onSelect={setSelectedCourier}
@@ -92,11 +128,13 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({
           )}
           <div className="summary-row total">
             <span>Итого к оплате:</span>
-            <strong>${(subtotal + (selectedCourier?.price || 0)).toFixed(2)}</strong>
+            <strong>
+              ${(subtotal + (selectedCourier?.price || 0)).toFixed(2)}
+            </strong>
           </div>
         </div>
-        
-        {/* <button 
+
+        {/* <button
           className={`confirm-btn ${isFormValid ? 'active' : 'disabled'}`}
           onClick={handleConfirm}
           disabled={!isFormValid}
