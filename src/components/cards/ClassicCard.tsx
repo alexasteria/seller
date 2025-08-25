@@ -1,6 +1,7 @@
-import React, {FC, useMemo, useState} from 'react';
-import {MenuItem as MenuItemType, Product} from '../../types';
-import { useExpandedCard } from '../../contexts/ExpandedCardContext';
+import React, { FC, useMemo, useState } from "react";
+import { Product } from "../../types";
+import { useExpandedCard } from "../../contexts/ExpandedCardContext";
+import ProductVariants from "../../components/cards/components/ProductVariants";
 
 interface CardProps {
   item: Product;
@@ -9,22 +10,30 @@ interface CardProps {
   onDecrement: (id: string) => void;
 }
 
-const ClassicCard: FC<CardProps> = ({ item, quantity, onIncrement, onDecrement }) => {
+const ClassicCard: FC<CardProps> = ({
+  item,
+  quantity,
+  onIncrement,
+  onDecrement,
+}) => {
   const { expandedCardId, setExpandedCardId } = useExpandedCard();
   const isExpanded = expandedCardId === item.id;
-  const [selectVariant, setSelectVariant] = useState(item.variants?.[0])
+  const [selectVariant, setSelectVariant] = useState(item.variants?.[0]);
   const price = useMemo(() => {
-    if (!selectVariant) return item.price
-    return item.price + selectVariant.priceModifier
-  },[selectVariant])
+    if (!selectVariant) return item.price;
+    return item.price + selectVariant.priceModifier;
+  }, [selectVariant]);
   const discountPrice = useMemo(() => {
-    if (!item.discount) return price
-    return price * (1 - item.discount / 100)
-  },[price])
+    if (!item.discount) return price;
+    return price * (1 - item.discount / 100);
+  }, [price]);
   return (
-    <div className={`card classic-card ${isExpanded ? 'expanded' : ''}`}>
+    <div className={`card classic-card ${isExpanded ? "expanded" : ""}`}>
       {!isExpanded && (
-        <div className="card-image-container" onClick={() => setExpandedCardId(isExpanded ? null : item.id)}>
+        <div
+          className="card-image-container"
+          onClick={() => setExpandedCardId(isExpanded ? null : item.id)}
+        >
           {item.img && (
             <div className="card-image">
               <img
@@ -33,7 +42,7 @@ const ClassicCard: FC<CardProps> = ({ item, quantity, onIncrement, onDecrement }
                 loading="lazy"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
-                  target.style.display = 'none';
+                  target.style.display = "none";
                 }}
               />
             </div>
@@ -50,7 +59,7 @@ const ClassicCard: FC<CardProps> = ({ item, quantity, onIncrement, onDecrement }
               loading="lazy"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
-                target.style.display = 'none';
+                target.style.display = "none";
               }}
             />
             <div className="card-expanded-overlay">
@@ -96,8 +105,12 @@ const ClassicCard: FC<CardProps> = ({ item, quantity, onIncrement, onDecrement }
                 <div className="card-price">
                   {item.discount ? (
                     <>
-                      <span className="discounted-price">₽{discountPrice.toFixed(2)}</span>
-                      <span className="original-price">₽{price.toFixed(2)}</span>
+                      <span className="discounted-price">
+                        ₽{discountPrice.toFixed(2)}
+                      </span>
+                      <span className="original-price">
+                        ₽{price.toFixed(2)}
+                      </span>
                     </>
                   ) : (
                     `₽${price.toFixed(2)}`
@@ -150,11 +163,9 @@ const ClassicCard: FC<CardProps> = ({ item, quantity, onIncrement, onDecrement }
               </div>
               <div className="card-expanded-price-section">
                 <div className="card-expanded-price">
-                  {item.discount ? (
-                    `₽${discountPrice.toFixed(2)}`
-                  ) : (
-                    `₽${price.toFixed(2)}`
-                  )}
+                  {item.discount
+                    ? `₽${discountPrice.toFixed(2)}`
+                    : `₽${price.toFixed(2)}`}
                 </div>
                 {item.discount && (
                   <div className="card-expanded-original-price">
@@ -173,7 +184,9 @@ const ClassicCard: FC<CardProps> = ({ item, quantity, onIncrement, onDecrement }
                 <div className="ingredients-title">{item.tags.name}:</div>
                 <div className="ingredients-list">
                   {item.tags.tags.map((value, index) => (
-                    <span key={index} className="ingredient-item">{value}</span>
+                    <span key={index} className="ingredient-item">
+                      {value}
+                    </span>
                   ))}
                 </div>
               </div>
@@ -194,14 +207,13 @@ const ClassicCard: FC<CardProps> = ({ item, quantity, onIncrement, onDecrement }
             {/*  )}*/}
             {/*</div>*/}
 
-            <div style={{display: "flex", justifyContent: "space-between", padding: "8px 12px"}}>{
-                selectVariant && item.variants?.map(variant => {
-                  return <div className="ingredient-item" style={{display: "flex", gap: 4, alignItems: "center"}} onClick={() => setSelectVariant(variant)}>
-                    <input type="radio" id={variant.id} name={variant.id} value={variant.id} checked={selectVariant?.id === variant.id}/>
-                    <label htmlFor={variant.id}>{variant.value}</label>
-                  </div>
-                })
-            }</div>
+            {selectVariant && (
+              <ProductVariants
+                variants={item.variants}
+                setSelectVariant={setSelectVariant}
+                selected={selectVariant?.id}
+              />
+            )}
 
             <div className="card-expanded-actions">
               {quantity > 0 ? (

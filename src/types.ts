@@ -9,7 +9,7 @@ export interface Product {
   options?: ProductOption[] //допы, например соус или сырный бортик к пицце
   tags?: ProductTags
 }
-type ProductVariant = {
+export type ProductVariant = {
   id: string;
   value: string;
   priceModifier: number;
