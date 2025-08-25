@@ -50,7 +50,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         },
       };
     });
-    if (!cartMap[product.id]) {
+    if (!cartMap.get(product.id)) {
       setCartMap((prev) => {
         return prev.set(product.id, product);
       });

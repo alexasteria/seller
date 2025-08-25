@@ -6,7 +6,7 @@ const ProductVariants: FC<{
   setSelectVariant: (v: ProductVariant) => void;
   selected?: string;
   variantState?: VariantState;
-}> = ({ variants, setSelectVariant, selected, variantState }) => {
+}> = ({ variants, setSelectVariant, selected, variantState = {} }) => {
   return (
     <div
       style={{
