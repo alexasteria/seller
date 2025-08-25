@@ -1,21 +1,22 @@
-import React, { FC } from 'react';
-import MenuItem from './MenuItem';
-import { MENU } from '../data/menu';
+import React, { FC } from "react";
+import MenuItem from "./MenuItem";
+import { MENU } from "../data/menu";
+import { CartState, Product } from "../types";
 
 interface MenuProps {
-  cart: Record<string, number>;
-  onIncrement: (id: string) => void;
+  cart: CartState;
+  onIncrement: (product: Product, variantID: string) => void;
   onDecrement: (id: string) => void;
 }
 
 const Menu: FC<MenuProps> = ({ cart, onIncrement, onDecrement }) => {
   return (
     <section className="grid">
-      {MENU.map(item => (
+      {MENU.map((item) => (
         <MenuItem
           key={item.id}
           item={item}
-          quantity={cart[item.id] ?? 0}
+          variantState={cart[item.id]}
           onIncrement={onIncrement}
           onDecrement={onDecrement}
         />

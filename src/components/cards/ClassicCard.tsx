@@ -1,24 +1,24 @@
 import React, { FC, useMemo, useState } from "react";
-import { Product } from "../../types";
+import { Product, VariantState } from "../../types";
 import { useExpandedCard } from "../../contexts/ExpandedCardContext";
 import ProductVariants from "../../components/cards/components/ProductVariants";
 
 interface CardProps {
   item: Product;
-  quantity: number;
-  onIncrement: (id: string) => void;
+  variantState?: VariantState;
+  onIncrement: (product: Product, variantID: string) => void;
   onDecrement: (id: string) => void;
 }
 
 const ClassicCard: FC<CardProps> = ({
   item,
-  quantity,
+  variantState,
   onIncrement,
   onDecrement,
 }) => {
   const { expandedCardId, setExpandedCardId } = useExpandedCard();
   const isExpanded = expandedCardId === item.id;
-  const [selectVariant, setSelectVariant] = useState(item.variants?.[0]);
+  const [selectVariant, setSelectVariant] = useState(item.variants[0]);
   const price = useMemo(() => {
     return selectVariant?.cost ?? 99999;
   }, [selectVariant]);
@@ -26,6 +26,9 @@ const ClassicCard: FC<CardProps> = ({
     if (!item.discount) return price;
     return price * (1 - item.discount / 100);
   }, [price]);
+  const quantity = useMemo(() => {
+    return variantState?.[selectVariant.id] || 0;
+  }, [selectVariant, variantState]);
   return (
     <div className={`card classic-card ${isExpanded ? "expanded" : ""}`}>
       {!isExpanded && (
@@ -134,7 +137,7 @@ const ClassicCard: FC<CardProps> = ({
                   <span className="qty">{quantity}</span>
                   <button
                     className="btn"
-                    onClick={() => onIncrement(item.id)}
+                    onClick={() => onIncrement(item, selectVariant.id)}
                     aria-label="Увеличить количество"
                   >
                     +
@@ -228,7 +231,7 @@ const ClassicCard: FC<CardProps> = ({
                   <span className="card-expanded-qty">{quantity}</span>
                   <button
                     className="card-expanded-btn"
-                    onClick={() => onIncrement(item.id)}
+                    onClick={() => onIncrement(item, selectVariant.id)}
                     aria-label="Увеличить количество"
                   >
                     +
@@ -237,7 +240,7 @@ const ClassicCard: FC<CardProps> = ({
               ) : (
                 <button
                   className="card-expanded-add-btn"
-                  onClick={() => onIncrement(item.id)}
+                  onClick={() => onIncrement(item, selectVariant.id)}
                   aria-label={`Добавить ${item.title}`}
                 >
                   <span className="btn-text">В корзину за</span>

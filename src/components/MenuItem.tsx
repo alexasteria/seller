@@ -1,19 +1,24 @@
-import React, { FC } from 'react';
-import { MenuItem as MenuItemType } from '../types';
-import ClassicCard from './cards/ClassicCard';
+import React, { FC } from "react";
+import { MenuItem as MenuItemType, Product, VariantState } from "../types";
+import ClassicCard from "./cards/ClassicCard";
 
 interface MenuItemProps {
   item: MenuItemType;
-  quantity: number;
-  onIncrement: (id: string) => void;
+  variantState?: VariantState;
+  onIncrement: (product: Product, variantID: string) => void;
   onDecrement: (id: string) => void;
 }
 
-const MenuItem: FC<MenuItemProps> = ({ item, quantity, onIncrement, onDecrement }) => {
+const MenuItem: FC<MenuItemProps> = ({
+  item,
+  variantState,
+  onIncrement,
+  onDecrement,
+}) => {
   return (
     <ClassicCard
       item={item}
-      quantity={quantity}
+      variantState={variantState}
       onIncrement={onIncrement}
       onDecrement={onDecrement}
     />

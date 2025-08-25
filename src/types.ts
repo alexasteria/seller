@@ -40,7 +40,8 @@ export interface MenuItem extends Product {
   cookingTime?: string;
 }
 
-export type CartState = Record<string, number>;
+export type VariantState = Record<string, number>;
+export type CartState = Record<string, VariantState>;
 
 export type OrderItem = {
   id: string;
