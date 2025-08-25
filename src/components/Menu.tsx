@@ -6,7 +6,7 @@ import { CartState, Product } from "../types";
 interface MenuProps {
   cart: CartState;
   onIncrement: (product: Product, variantID: string) => void;
-  onDecrement: (id: string) => void;
+  onDecrement: (product: Product, variantID: string) => void;
 }
 
 const Menu: FC<MenuProps> = ({ cart, onIncrement, onDecrement }) => {

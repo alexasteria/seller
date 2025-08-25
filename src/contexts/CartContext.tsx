@@ -7,7 +7,7 @@ interface CartContextType {
   total: number;
   hasItems: boolean;
   increment: (product: Product, variantID: string) => void;
-  decrement: (id: string) => void;
+  decrement: (product: Product, variantID: string) => void;
   clearCart: () => void;
 }
 
@@ -48,12 +48,24 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       };
     });
 
-  const decrement = (id: string) =>
+  const decrement = (product: Product, variantID: string) =>
     setCart((prev) => {
-      const next = { ...prev };
-      if ((next[id] ?? 0) > 1) next[id] = next[id] - 1;
-      else delete next[id];
-      return next;
+      const variantCount = prev[product.id] || {};
+      return {
+        ...prev,
+        [product.id]: {
+          ...prev[product.id],
+          [variantID]: (variantCount[variantID] ?? 0) - 1,
+        },
+      };
+      // const next = { ...prev };
+      // const item = next[product.id];
+      // if ((item[variantID] ?? 0) > 1) {
+      //   item[variantID] = item[variantID] - 1;
+      // } else {
+      //   delete item[variantID];
+      // }
+      // return next;
     });
 
   const clearCart = () => setCart({});

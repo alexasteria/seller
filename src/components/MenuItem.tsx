@@ -6,7 +6,7 @@ interface MenuItemProps {
   item: MenuItemType;
   variantState?: VariantState;
   onIncrement: (product: Product, variantID: string) => void;
-  onDecrement: (id: string) => void;
+  onDecrement: (product: Product, variantID: string) => void;
 }
 
 const MenuItem: FC<MenuItemProps> = ({

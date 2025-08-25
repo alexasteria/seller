@@ -7,7 +7,7 @@ interface CardProps {
   item: Product;
   variantState?: VariantState;
   onIncrement: (product: Product, variantID: string) => void;
-  onDecrement: (id: string) => void;
+  onDecrement: (product: Product, variantID: string) => void;
 }
 
 const ClassicCard: FC<CardProps> = ({
@@ -129,7 +129,7 @@ const ClassicCard: FC<CardProps> = ({
                 <div className="counter">
                   <button
                     className="btn"
-                    onClick={() => onDecrement(item.id)}
+                    onClick={() => onDecrement(item, selectVariant.id)}
                     aria-label="Уменьшить количество"
                   >
                     −
@@ -223,7 +223,7 @@ const ClassicCard: FC<CardProps> = ({
                 <div className="card-expanded-counter">
                   <button
                     className="card-expanded-btn"
-                    onClick={() => onDecrement(item.id)}
+                    onClick={() => onDecrement(item, selectVariant.id)}
                     aria-label="Уменьшить количество"
                   >
                     −
