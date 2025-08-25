@@ -73,7 +73,7 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({
         <h2>Доставка</h2>
       </header>
 
-      <div style={{ display: "flex", flexDirection: "column" }}>
+      <div style={{ display: "flex", flexDirection: "column", padding: 10 }}>
         {Object.entries(cart).map(([productID, variants]) => {
           const item = cartMap.get(productID)!;
           return (
@@ -92,7 +92,13 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({
                     const v = item.variants.find((v) => v.id === variantID);
                     if (!v) throw Error("wrong variants");
                     return (
-                      <div>
+                      <div
+                        style={{
+                          padding: "4px",
+                          borderRadius: 6,
+                          backgroundColor: "#c6c6c6",
+                        }}
+                      >
                         {v.value} x {count}
                       </div>
                     );
