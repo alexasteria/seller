@@ -9,13 +9,14 @@ interface CartContextType {
   increment: (product: Product, variantID: string) => void;
   decrement: (product: Product, variantID: string) => void;
   clearCart: () => void;
+  cartMap: Map<string, Product>;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<CartState>({});
-
+  const [cartMap, setCartMap] = useState<Map<string, Product>>(new Map());
   const total = useMemo(
     () =>
       Object.entries(cart).reduce((sum, [id, variantState]) => {
@@ -38,7 +39,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const hasItems = total > 0.009;
 
-  const increment = (product: Product, variantID: string) =>
+  const increment = (product: Product, variantID: string) => {
     setCart((prev) => {
       const variantCount = prev[product.id] || {};
       return {
@@ -49,6 +50,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         },
       };
     });
+    if (!cartMap[product.id]) {
+      setCartMap((prev) => {
+        return prev.set(product.id, product);
+      });
+    }
+  };
 
   const decrement = (product: Product, variantID: string) =>
     setCart((prev) => {
@@ -71,6 +78,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     increment,
     decrement,
     clearCart,
+    cartMap,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

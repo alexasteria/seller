@@ -1,11 +1,12 @@
 import React, { FC } from "react";
-import { ProductVariant } from "../../../types";
+import { ProductVariant, VariantState } from "../../../types";
 
 const ProductVariants: FC<{
   variants?: ProductVariant[];
   setSelectVariant: (v: ProductVariant) => void;
   selected?: string;
-}> = ({ variants, setSelectVariant, selected }) => {
+  variantState?: VariantState;
+}> = ({ variants, setSelectVariant, selected, variantState }) => {
   return (
     <div
       style={{
@@ -28,10 +29,26 @@ const ProductVariants: FC<{
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
+              position: "relative",
             }}
             onClick={() => setSelectVariant(variant)}
           >
             {variant.value}
+            {Boolean(variantState[variant.id]) && (
+              <span
+                style={{
+                  position: "absolute",
+                  top: -10,
+                  right: -10,
+                  backgroundColor: "#ff6b6be6",
+                  padding: "4px 8px",
+                  borderRadius: "50%",
+                  color: "#fff",
+                }}
+              >
+                {variantState[variant.id]}
+              </span>
+            )}
           </div>
         );
       })}

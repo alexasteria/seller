@@ -115,11 +115,7 @@ const pizzaMenu: Product[] = [
     img: "https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400&h=300&fit=crop&crop=center",
     description: "Томатный соус, моцарелла, пепперони",
     discount: 10,
-    variants: [
-      { id: "25cm", value: "25 см", cost: 0, stock: 12 },
-      { id: "30cm", value: "30 см", cost: 200, stock: 9 },
-      { id: "35cm", value: "35 см", cost: 400, stock: 6 },
-    ],
+    variants: [{ id: "35cm", value: "35 см", cost: 400, stock: 6 }],
     options: [
       {
         id: "cheeseCrust",

@@ -12,7 +12,7 @@ interface CardProps {
 
 const ClassicCard: FC<CardProps> = ({
   item,
-  variantState,
+  variantState = {},
   onIncrement,
   onDecrement,
 }) => {
@@ -29,6 +29,11 @@ const ClassicCard: FC<CardProps> = ({
   const quantity = useMemo(() => {
     return variantState?.[selectVariant.id] || 0;
   }, [selectVariant, variantState]);
+  const totalCount = useMemo(() => {
+    return Object.entries(variantState).reduce((sum, [_, count]) => {
+      return sum + count;
+    }, 0);
+  }, [variantState]);
   return (
     <div className={`card classic-card ${isExpanded ? "expanded" : ""}`}>
       {!isExpanded && (
@@ -47,6 +52,22 @@ const ClassicCard: FC<CardProps> = ({
                   target.style.display = "none";
                 }}
               />
+              {Boolean(totalCount) && (
+                <span
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    right: 0,
+                    backgroundColor: "#ff6b6be6",
+                    padding: "4px 10px",
+                    fontSize: 12,
+                    borderRadius: "50%",
+                    color: "#fff",
+                  }}
+                >
+                  {totalCount}
+                </span>
+              )}
             </div>
           )}
         </div>
@@ -215,6 +236,7 @@ const ClassicCard: FC<CardProps> = ({
                 variants={item.variants}
                 setSelectVariant={setSelectVariant}
                 selected={selectVariant?.id}
+                variantState={variantState}
               />
             )}
 
