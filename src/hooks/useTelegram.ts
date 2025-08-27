@@ -1,27 +1,30 @@
 import { useEffect, useState, useCallback } from "react";
-import { CartState, OrderPayload, DeliveryInfo, OrderItem } from "../types";
-import { MENU } from "../data/menu";
+import { CartState, OrderPayload, DeliveryInfo, OrderItem } from "@/types";
+import { MENU } from "@/data/menu";
 import { WebApp } from "telegram-web-app";
 
 const tg: WebApp = (window as any).Telegram?.WebApp;
 
 // Функция для отправки заказа в чат и боту
-const sendOrderToChat = (payload: OrderPayload, deliveryInfo: DeliveryInfo) => {
+const sendOrderToChat = (
+  payload: OrderPayload,
+  deliveryInfo?: DeliveryInfo | null,
+) => {
   const items = payload.items;
 
   // Создаем красивое сообщение для чата
-  const orderSummary = `🍕 *Новый заказ!*\n\n${items
+  let orderSummary = `🍕 *Новый заказ!*\n\n${items
     .map(
       (item) =>
         `• ${item.title} x${item.quantity} - $${(item.price * item.quantity).toFixed(2)}`,
     )
-    .join(
-      "\n",
-    )}\n\n📍 *Адрес доставки:*\n${deliveryInfo.address.city}, ${deliveryInfo.address.street}, ${deliveryInfo.address.house}${deliveryInfo.address.apartment ? `, кв. ${deliveryInfo.address.apartment}` : ""}\n\n🚚 *Курьер:* ${deliveryInfo.courier.name} (${deliveryInfo.courier.time})\n\n💰 *Итого к оплате:* $${deliveryInfo.totalWithDelivery.toFixed(2)}`;
-
+    .join("\n")}`;
+  if (deliveryInfo) {
+    orderSummary += `\n\n📍 *Адрес доставки:*\n${deliveryInfo.address.city}, ${deliveryInfo.address.street}, ${deliveryInfo.address.house}${deliveryInfo.address.apartment ? `, кв. ${deliveryInfo.address.apartment}` : ""}\n\n🚚 *Курьер:* ${deliveryInfo.courier.name} (${deliveryInfo.courier.time})\n\n💰 *Итого к оплате:* $${deliveryInfo.totalWithDelivery.toFixed(2)}`;
+  }
   // Показываем popup с информацией о заказе
   try {
-    const popupMessage = `Заказ успешно оформлен!\n\nСумма: $${deliveryInfo.totalWithDelivery.toFixed(2)}\nКурьер: ${deliveryInfo.courier.name}\n\nОжидайте подтверждения от ресторана.`;
+    const popupMessage = `Заказ успешно оформлен!\n\nСумма: $${deliveryInfo?.totalWithDelivery.toFixed(2)}\nКурьер: ${deliveryInfo.courier.name}\n\nОжидайте подтверждения от ресторана.`;
     tg.showPopup({
       title: "✅ Заказ принят!",
       message: popupMessage,
@@ -46,23 +49,36 @@ export function useTelegramUi(
 
   // Создаем стабильную функцию для обработки клика
   const handleMainButtonClick = useCallback(() => {
-    if (appState === "delivery" && deliveryInfo) {
+    if (appState === "delivery") {
       // На странице доставки - подтверждаем заказ
       setIsSubmitting(true);
 
-      const items: OrderItem[] = Object.entries(cart)
-        .map(([id, variantState]) => {
-          const item = MENU.find((m) => m.id === id);
-          if (!item) return null;
-          return {
-            id: item.id,
-            title: item.title,
-            price: 999999,
-            quantity: 1,
-            description: item.description,
-          };
-        })
-        .filter((x): x is NonNullable<typeof x> => Boolean(x));
+      const items: OrderItem[] = [];
+      Object.entries(cart).forEach(([productID, variantState]) => {
+        const product = MENU.find((m) => m.id === productID);
+        if (!product) return;
+
+        Object.entries(variantState).forEach(([variantID, count]) => {
+          if (count <= 0) return; // Skip if quantity is zero or less
+
+          const variant = product.variants.find((v) => v.id === variantID);
+          if (!variant) return;
+
+          // Calculate the price for this specific variant, considering product discount
+          const basePrice = variant.cost;
+          const discountedPrice = product.discount
+            ? basePrice * (1 - product.discount / 100)
+            : basePrice;
+
+          items.push({
+            id: product.id, // Or variant.id if each variant is a distinct order item
+            title: `${product.title} (${variant.value})`, // Include variant info in title
+            price: discountedPrice, // Price per unit of this variant
+            quantity: count,
+            description: product.description,
+          });
+        });
+      });
 
       const payload: OrderPayload = {
         action: "checkout",

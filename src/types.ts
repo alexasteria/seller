@@ -56,7 +56,7 @@ export type OrderPayload = {
   items: OrderItem[];
   total: number;
   currency: string;
-  delivery?: DeliveryInfo;
+  delivery?: DeliveryInfo | null;
   timestamp?: number;
   user?: {
     id?: number;
