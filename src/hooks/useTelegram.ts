@@ -152,19 +152,27 @@ export function useTelegramUi(
 
     if (location.pathname === "delivery") {
       // На странице доставки показываем кнопку подтверждения
-      if (deliveryInfo) {
-        if (isSubmitting) {
-          buttonText = "📤 Отправляем заказ...";
-          buttonColor = "#6c757d";
-        } else {
-          buttonText = `Оплатить · ₽${deliveryInfo.totalWithDelivery.toFixed(2)}`;
-          buttonColor = tg.themeParams.button_color || "#2481cc";
-        }
-        shouldShow = true;
+      if (isSubmitting) {
+        buttonText = "📤 Отправляем заказ...";
+        buttonColor = "#6c757d";
       } else {
-        buttonText = "Заполните адрес и выберите курьера";
-        shouldShow = false;
+        buttonText = `Оплатить · ${cartTotal.toFixed(2)}₽`;
+        buttonColor = tg.themeParams.button_color || "#2481cc";
       }
+      shouldShow = true;
+      // if (deliveryInfo) {
+      //   if (isSubmitting) {
+      //     buttonText = "📤 Отправляем заказ...";
+      //     buttonColor = "#6c757d";
+      //   } else {
+      //     buttonText = `Оплатить · ₽${deliveryInfo.totalWithDelivery.toFixed(2)}`;
+      //     buttonColor = tg.themeParams.button_color || "#2481cc";
+      //   }
+      //   shouldShow = true;
+      // } else {
+      //   buttonText = "Заполните адрес и выберите курьера";
+      //   shouldShow = false;
+      // }
     } else if (location.pathname === "menu") {
       // На главной странице показываем кнопку перехода к доставке
       buttonText = hasItems
