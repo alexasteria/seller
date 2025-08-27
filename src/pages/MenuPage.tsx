@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from '../components/Header';
-import Menu from '../components/Menu';
-import Footer from '../components/Footer';
-import { useCart } from '../contexts/CartContext';
-import { useTelegramUi, useTheme } from '../hooks/useTelegram';
-import { useThemeSync } from '../hooks/useThemeSync';
+import Header from '@/components/Header';
+import Menu from '@/components/Menu';
+import Footer from '@/components/Footer';
+import { useCart } from '@/contexts/CartContext';
+import { useTelegramUi, useTheme } from '@/hooks/useTelegram';
+import { useThemeSync } from '@/hooks/useThemeSync';
 
 const MenuPage: FC = () => {
   const navigate = useNavigate();

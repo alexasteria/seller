@@ -1,7 +1,8 @@
 import React, { FC } from "react";
-import MenuItem from "./MenuItem";
-import { MENU } from "../data/menu";
-import { CartState, Product } from "../types";
+import ExpandableCard from "@/components/cards/ExpandableCard";
+import { MENU } from "@/data/menu";
+import { CartState, Product } from "@/types";
+import styles from "@/components/Menu.module.css";
 
 interface MenuProps {
   cart: CartState;
@@ -11,9 +12,9 @@ interface MenuProps {
 
 const Menu: FC<MenuProps> = ({ cart, onIncrement, onDecrement }) => {
   return (
-    <section className="grid">
+    <section className={styles.grid}>
       {MENU.map((item) => (
-        <MenuItem
+        <ExpandableCard
           key={item.id}
           item={item}
           variantState={cart[item.id]}

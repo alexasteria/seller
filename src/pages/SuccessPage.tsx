@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from '../components/Header';
-import { useTheme } from '../hooks/useTelegram';
-import { useThemeSync } from '../hooks/useThemeSync';
+import Header from '@/components/Header';
+import { useTheme } from '@/hooks/useTelegram';
+import { useThemeSync } from '@/hooks/useThemeSync';
 
 const SuccessPage: FC = () => {
   const navigate = useNavigate();

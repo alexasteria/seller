@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useMemo, useState } from "react";
-import { CartState, Product } from "../types";
-import { MENU } from "../data/menu";
+import { CartState, Product } from "@/types";
+import { MENU } from "@/data/menu";
 
 interface CartContextType {
   cart: CartState;

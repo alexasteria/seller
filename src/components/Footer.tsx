@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import styles from '@/components/Footer.module.css';
 
 interface FooterProps {
   total: number;
@@ -6,8 +7,8 @@ interface FooterProps {
 
 const Footer: FC<FooterProps> = ({ total }) => {
   return (
-    <footer className="footer">
-      <div className="summary">
+    <footer className={styles.footer}>
+      <div className={styles.summary}>
         <span>Итого</span>
         <strong>₽{total.toFixed(2)}</strong>
       </div>

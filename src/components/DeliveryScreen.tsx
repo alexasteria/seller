@@ -1,8 +1,9 @@
 import React, { FC, useState, useEffect } from "react";
-import { DeliveryAddress, CourierService, DeliveryInfo } from "../types";
-import DeliveryAddressForm from "./DeliveryAddressForm";
-import CourierSelection from "./CourierSelection";
-import { useCart } from "../contexts/CartContext";
+import { DeliveryAddress, CourierService, DeliveryInfo } from "@/types";
+import DeliveryAddressForm from "@/components/DeliveryAddressForm";
+import CourierSelection from "@/components/CourierSelection";
+import { useCart } from "@/contexts/CartContext";
+import styles from "@/components/DeliveryScreen.module.css";
 
 interface DeliveryScreenProps {
   subtotal: number;
@@ -28,9 +29,9 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({
     comment: "",
   });
 
-  const [selectedCourier, setSelectedCourier] = useState<CourierService | null>(
-    null,
-  );
+  // const [selectedCourier, setSelectedCourier] = useState<CourierService | null>(
+  //   null,
+  // );
 
   const isFormValid =
     address.city.trim() &&
@@ -39,35 +40,35 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({
     selectedCourier;
 
   // Обновляем информацию о доставке для Telegram
-  useEffect(() => {
-    if (isFormValid && selectedCourier && onDeliveryInfoChange) {
-      const deliveryInfo: DeliveryInfo = {
-        address,
-        courier: selectedCourier,
-        totalWithDelivery: subtotal + selectedCourier.price,
-      };
-      onDeliveryInfoChange(deliveryInfo);
-    } else if (onDeliveryInfoChange) {
-      onDeliveryInfoChange(null);
-    }
-  }, [address, selectedCourier, subtotal, isFormValid, onDeliveryInfoChange]);
+  // useEffect(() => {
+  //   if (isFormValid && selectedCourier && onDeliveryInfoChange) {
+  //     const deliveryInfo: DeliveryInfo = {
+  //       address,
+  //       courier: selectedCourier,
+  //       totalWithDelivery: subtotal + selectedCourier.price,
+  //     };
+  //     onDeliveryInfoChange(deliveryInfo);
+  //   } else if (onDeliveryInfoChange) {
+  //     onDeliveryInfoChange(null);
+  //   }
+  // }, [address, selectedCourier, subtotal, isFormValid, onDeliveryInfoChange]);
 
-  const handleConfirm = () => {
-    if (!isFormValid || !selectedCourier) return;
-
-    const deliveryInfo: DeliveryInfo = {
-      address,
-      courier: selectedCourier,
-      totalWithDelivery: subtotal + selectedCourier.price,
-    };
-
-    onConfirm(deliveryInfo);
-  };
+  // const handleConfirm = () => {
+  //   if (!isFormValid || !selectedCourier) return;
+  //
+  //   const deliveryInfo: DeliveryInfo = {
+  //     address,
+  //     courier: selectedCourier,
+  //     totalWithDelivery: subtotal + selectedCourier.price,
+  //   };
+  //
+  //   onConfirm(deliveryInfo);
+  // };
 
   return (
-    <div className="delivery-screen">
-      <header className="delivery-header">
-        <button className="back-btn" onClick={onBack}>
+    <div className={styles.deliveryScreen}>
+      <header className={styles.deliveryHeader}>
+        <button className={styles.backBtn} onClick={onBack}>
           ← Назад к меню
         </button>
         <h2>Доставка</h2>
@@ -110,38 +111,39 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({
         })}
       </div>
 
-      <div className="delivery-content">
+      <div className={styles.deliveryContent}>
         <DeliveryAddressForm address={address} onChange={setAddress} />
 
-        <CourierSelection
-          selectedCourier={selectedCourier}
-          onSelect={setSelectedCourier}
-          subtotal={subtotal}
-        />
+        {/*<CourierSelection*/}
+        {/*  selectedCourier={selectedCourier}*/}
+        {/*  onSelect={setSelectedCourier}*/}
+        {/*  subtotal={subtotal}*/}
+        {/*/>*/}
       </div>
 
-      <footer className="delivery-footer">
-        <div className="delivery-summary">
-          <div className="summary-row">
+      <footer className={styles.deliveryFooter}>
+        <div className={styles.deliverySummary}>
+          <div className={styles.summaryRow}>
             <span>Сумма заказа:</span>
             <span>${subtotal.toFixed(2)}</span>
           </div>
-          {selectedCourier && (
-            <div className="summary-row">
-              <span>Доставка ({selectedCourier.name}):</span>
-              <span>+${selectedCourier.price.toFixed(2)}</span>
-            </div>
-          )}
-          <div className="summary-row total">
+          {/*{selectedCourier && (*/}
+          {/*  <div className="summary-row">*/}
+          {/*    <span>Доставка ({selectedCourier.name}):</span>*/}
+          {/*    <span>+${selectedCourier.price.toFixed(2)}</span>*/}
+          {/*  </div>*/}
+          {/*)}*/}
+          <div className={`${styles.summaryRow} ${styles.total}`}>
             <span>Итого к оплате:</span>
             <strong>
-              ${(subtotal + (selectedCourier?.price || 0)).toFixed(2)}
+              {/*${(subtotal + (selectedCourier?.price || 0)).toFixed(2)}*/}$
+              {subtotal.toFixed(2)}
             </strong>
           </div>
         </div>
 
         {/* <button
-          className={`confirm-btn ${isFormValid ? 'active' : 'disabled'}`}
+          className={`${styles.confirmBtn} ${isFormValid ? styles.active : styles.disabled}`}
           onClick={handleConfirm}
           disabled={!isFormValid}
         >

@@ -1,12 +1,17 @@
-import React from 'react';
-import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import MenuPage from './pages/MenuPage';
-import DeliveryPage from './pages/DeliveryPage';
-import SuccessPage from './pages/SuccessPage';
-import { CartProvider } from './contexts/CartContext';
-import { ExpandedCardProvider } from './contexts/ExpandedCardContext';
+import React, { FC } from "react";
+import {
+  HashRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import MenuPage from "@/pages/MenuPage";
+import DeliveryPage from "@/pages/DeliveryPage";
+import SuccessPage from "@/pages/SuccessPage";
+import { CartProvider } from "@/contexts/CartContext";
+import { ExpandedCardProvider } from "@/contexts/ExpandedCardContext";
 
-export default function App() {
+const App: FC = () => {
   return (
     <CartProvider>
       <ExpandedCardProvider>
@@ -21,6 +26,6 @@ export default function App() {
       </ExpandedCardProvider>
     </CartProvider>
   );
-}
+};
 
-
+export default App;

@@ -1,8 +1,9 @@
 import { useEffect, useState, useCallback } from "react";
 import { CartState, OrderPayload, DeliveryInfo, OrderItem } from "../types";
 import { MENU } from "../data/menu";
+import { WebApp } from "telegram-web-app";
 
-const tg = (window as any).Telegram?.WebApp;
+const tg: WebApp = (window as any).Telegram?.WebApp;
 
 // Функция для отправки заказа в чат и боту
 const sendOrderToChat = (payload: OrderPayload, deliveryInfo: DeliveryInfo) => {

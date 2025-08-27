@@ -1,5 +1,6 @@
 import React, { FC } from "react";
-import { ProductVariant, VariantState } from "../../../types";
+import { ProductVariant, VariantState } from "@/types";
+import styles from '@/components/cards/components/ProductVariants.module.css';
 
 const ProductVariants: FC<{
   variants?: ProductVariant[];
@@ -8,44 +9,18 @@ const ProductVariants: FC<{
   variantState?: VariantState;
 }> = ({ variants, setSelectVariant, selected, variantState = {} }) => {
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-around",
-        padding: "12px",
-      }}
-    >
+    <div className={styles.variantsContainer}>
       {variants?.map((variant) => {
+        const isSelected = selected === variant.id;
         return (
           <div
-            className="ingredient-item"
-            style={{
-              width: 75,
-              height: 50,
-              border:
-                selected !== variant.id
-                  ? "2px solid #c6c6c6"
-                  : "2px solid var(--button)",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              position: "relative",
-            }}
+            className={`${styles.variantItem} ${isSelected ? styles.selected : ''}`}
             onClick={() => setSelectVariant(variant)}
+            key={variant.id}
           >
             {variant.value}
             {Boolean(variantState[variant.id]) && (
-              <span
-                style={{
-                  position: "absolute",
-                  top: -10,
-                  right: -10,
-                  backgroundColor: "#ff6b6be6",
-                  padding: "4px 8px",
-                  borderRadius: "50%",
-                  color: "#fff",
-                }}
-              >
+              <span className={styles.count}>
                 {variantState[variant.id]}
               </span>
             )}

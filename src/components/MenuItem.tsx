@@ -1,6 +1,6 @@
 import React, { FC } from "react";
-import { MenuItem as MenuItemType, Product, VariantState } from "../types";
-import ClassicCard from "./cards/ClassicCard";
+import { MenuItem as MenuItemType, Product, VariantState } from "@/types";
+import ClassicCard from "@/components/cards/ClassicCard";
 
 interface MenuItemProps {
   item: MenuItemType;

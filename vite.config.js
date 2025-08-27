@@ -1,7 +1,13 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import path from 'path';
 export default defineConfig({
     plugins: [react()],
+    resolve: {
+        alias: {
+            '@': path.resolve(__dirname, './src'),
+        },
+    },
     // Set base path for GitHub Pages when building in CI
     // If running in GitHub Actions, GITHUB_REPOSITORY is like "owner/repo"
     // This makes assets served from "/repo/" which GH Pages requires
