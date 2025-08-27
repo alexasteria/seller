@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { CartState, OrderPayload, DeliveryInfo, OrderItem } from "@/types";
 import { MENU } from "@/data/menu";
 import { WebApp } from "telegram-web-app";
+import { useLocation } from "react-router-dom";
 
 const tg: WebApp = (window as any).Telegram?.WebApp;
 
@@ -39,16 +40,15 @@ export function useTelegramUi(
   cart: CartState,
   cartTotal: number,
   hasItems: boolean,
-  appState: string,
   deliveryInfo?: DeliveryInfo | null,
   onNavigateToDelivery?: () => void,
 ) {
   const [isInitialized, setIsInitialized] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const location = useLocation();
   // Создаем стабильную функцию для обработки клика
   const handleMainButtonClick = useCallback(() => {
-    if (appState === "delivery") {
+    if (location.pathname === "delivery") {
       // На странице доставки - подтверждаем заказ
       setIsSubmitting(true);
 
@@ -122,11 +122,11 @@ export function useTelegramUi(
         setIsSubmitting(false);
         tg.showAlert("Ошибка отправки заказа. Попробуйте еще раз.");
       }
-    } else if (appState === "menu" && onNavigateToDelivery) {
+    } else if (location.pathname === "menu" && onNavigateToDelivery) {
       // На главной странице - переходим к доставке
       onNavigateToDelivery();
     }
-  }, [cart, cartTotal, appState, deliveryInfo, onNavigateToDelivery]);
+  }, [cart, cartTotal, location, deliveryInfo, onNavigateToDelivery]);
 
   // Инициализация Telegram Web App
   useEffect(() => {
@@ -150,7 +150,7 @@ export function useTelegramUi(
     let buttonColor = tg.themeParams.button_color || "#2481cc";
     let textColor = tg.themeParams.button_text_color || "#ffffff";
 
-    if (appState === "delivery") {
+    if (location.pathname === "delivery") {
       // На странице доставки показываем кнопку подтверждения
       if (deliveryInfo) {
         if (isSubmitting) {
@@ -165,7 +165,7 @@ export function useTelegramUi(
         buttonText = "Заполните адрес и выберите курьера";
         shouldShow = false;
       }
-    } else if (appState === "menu") {
+    } else if (location.pathname === "menu") {
       // На главной странице показываем кнопку перехода к доставке
       buttonText = hasItems
         ? `Перейти к доставке · ${cartTotal.toFixed(2)}₽`
@@ -192,7 +192,7 @@ export function useTelegramUi(
     cartTotal,
     hasItems,
     isInitialized,
-    appState,
+    location,
     deliveryInfo,
     isSubmitting,
   ]);

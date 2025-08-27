@@ -16,7 +16,6 @@ const DeliveryPage: FC = () => {
     cart,
     total,
     true,
-    "delivery",
     deliveryInfo,
   );
   useThemeSync(theme);

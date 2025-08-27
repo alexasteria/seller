@@ -1,11 +1,11 @@
-import React, { FC } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Header from '@/components/common/Header';
-import Menu from '@/pages/MenuPage/components/Menu/Menu';
-import Footer from '@/components/common/Footer';
-import { useCart } from '@/contexts/CartContext';
-import { useTelegramUi, useTheme } from '@/hooks/useTelegram';
-import { useThemeSync } from '@/hooks/useThemeSync';
+import React, { FC } from "react";
+import { useNavigate } from "react-router-dom";
+import Header from "@/components/common/Header";
+import Menu from "@/pages/MenuPage/components/Menu/Menu";
+import Footer from "@/components/common/Footer";
+import { useCart } from "@/contexts/CartContext";
+import { useTelegramUi, useTheme } from "@/hooks/useTelegram";
+import { useThemeSync } from "@/hooks/useThemeSync";
 
 const MenuPage: FC = () => {
   const navigate = useNavigate();
@@ -13,32 +13,27 @@ const MenuPage: FC = () => {
   const theme = useTheme();
 
   const handleNavigateToDelivery = () => {
-    navigate('/delivery');
+    navigate("/delivery");
   };
 
   const { isTelegramAvailable } = useTelegramUi(
-    cart, 
-    total, 
-    hasItems, 
-    'menu', 
+    cart,
+    total,
+    hasItems,
     null,
-    handleNavigateToDelivery
+    handleNavigateToDelivery,
   );
-  
+
   useThemeSync(theme);
 
   const handleCheckout = () => {
-    navigate('/delivery');
+    navigate("/delivery");
   };
 
   return (
     <div className="container">
       <Header />
-      <Menu 
-        cart={cart}
-        onIncrement={increment}
-        onDecrement={decrement}
-      />
+      <Menu cart={cart} onIncrement={increment} onDecrement={decrement} />
       <Footer total={total} />
     </div>
   );
