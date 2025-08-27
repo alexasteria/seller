@@ -7,8 +7,8 @@
 }
 
 .cardImageContainer {
-  width: 80px;
-  height: 80px;
+  width: 120px; /* Increased size */
+  height: 120px; /* Increased size */
   border-radius: 12px;
   overflow: hidden;
   flex-shrink: 0;
@@ -22,6 +22,9 @@
   object-fit: cover;
   border-radius: 12px;
   transition: border-radius 0.4s ease;
+  /* Add fading effect */
+  mask-image: linear-gradient(to right, black 70%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, black 70%, transparent 100%);
 }
 
 .badge {
@@ -106,8 +109,8 @@
   }
 
   .cardImageContainer {
-    width: 70px;
-    height: 70px;
+    width: 100px; /* Adjusted size for mobile */
+    height: 100px; /* Adjusted size for mobile */
   }
 
   .cardTitle {

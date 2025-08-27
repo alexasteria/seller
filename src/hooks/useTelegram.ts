@@ -10,30 +10,29 @@ const sendOrderToChat = (
   payload: OrderPayload,
   deliveryInfo?: DeliveryInfo | null,
 ) => {
-  const items = payload.items;
-
+  //const items = payload.items;
   // Создаем красивое сообщение для чата
-  let orderSummary = `🍕 *Новый заказ!*\n\n${items
-    .map(
-      (item) =>
-        `• ${item.title} x${item.quantity} - $${(item.price * item.quantity).toFixed(2)}`,
-    )
-    .join("\n")}`;
-  if (deliveryInfo) {
-    orderSummary += `\n\n📍 *Адрес доставки:*\n${deliveryInfo.address.city}, ${deliveryInfo.address.street}, ${deliveryInfo.address.house}${deliveryInfo.address.apartment ? `, кв. ${deliveryInfo.address.apartment}` : ""}\n\n🚚 *Курьер:* ${deliveryInfo.courier.name} (${deliveryInfo.courier.time})\n\n💰 *Итого к оплате:* $${deliveryInfo.totalWithDelivery.toFixed(2)}`;
-  }
+  // let orderSummary = `🍕 *Новый заказ!*\n\n${items
+  //   .map(
+  //     (item) =>
+  //       `• ${item.title} x${item.quantity} - $${(item.price * item.quantity).toFixed(2)}`,
+  //   )
+  //   .join("\n")}`;
+  // if (deliveryInfo) {
+  //   orderSummary += `\n\n📍 *Адрес доставки:*\n${deliveryInfo.address.city}, ${deliveryInfo.address.street}, ${deliveryInfo.address.house}${deliveryInfo.address.apartment ? `, кв. ${deliveryInfo.address.apartment}` : ""}\n\n🚚 *Курьер:* ${deliveryInfo.courier.name} (${deliveryInfo.courier.time})\n\n💰 *Итого к оплате:* $${deliveryInfo.totalWithDelivery.toFixed(2)}`;
+  // }
   // Показываем popup с информацией о заказе
-  try {
-    const popupMessage = `Заказ успешно оформлен!\n\nСумма: $${deliveryInfo?.totalWithDelivery.toFixed(2)}\nКурьер: ${deliveryInfo.courier.name}\n\nОжидайте подтверждения от ресторана.`;
-    tg.showPopup({
-      title: "✅ Заказ принят!",
-      message: popupMessage,
-      buttons: [{ type: "ok", text: "Понятно" }],
-    });
-  } catch (error) {
-    // Fallback к alert
-    tg.showAlert(orderSummary);
-  }
+  // try {
+  //   const popupMessage = `Заказ успешно оформлен!\n\nСумма: $${deliveryInfo?.totalWithDelivery.toFixed(2)}\nКурьер: ${deliveryInfo.courier.name}\n\nОжидайте подтверждения от ресторана.`;
+  //   tg.showPopup({
+  //     title: "✅ Заказ принят!",
+  //     message: popupMessage,
+  //     buttons: [{ type: "ok", text: "Понятно" }],
+  //   });
+  // } catch (error) {
+  //   // Fallback к alert
+  //   tg.showAlert(orderSummary);
+  // }
 };
 
 export function useTelegramUi(
