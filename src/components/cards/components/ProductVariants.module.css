@@ -25,7 +25,9 @@
   top: -10px;
   right: -10px;
   background-color: #ff6b6be6;
-  padding: 4px 8px;
+  height: 25px;
+  width: 25px;
+  text-align: center;
   border-radius: 50%;
   color: #fff;
 }
