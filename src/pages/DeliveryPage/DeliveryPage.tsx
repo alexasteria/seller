@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import DeliveryScreen from "@/components/DeliveryScreen";
+import DeliveryScreen from "@/pages/DeliveryPage/components/DeliveryScreen/DeliveryScreen";
 import { useCart } from "@/contexts/CartContext";
 import { useTelegramUi, useTheme } from "@/hooks/useTelegram";
 import { useThemeSync } from "@/hooks/useThemeSync";

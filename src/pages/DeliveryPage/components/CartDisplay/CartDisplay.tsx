@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { CartState, Product } from '@/types';
-import styles from './CartDisplay.module.css';
+import styles from '@/pages/DeliveryPage/components/CartDisplay/CartDisplay.module.css';
 
 interface CartDisplayProps {
   cart: CartState;

@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import styles from "@/components/Footer.module.css";
+import styles from "./Footer.module.css";
 
 interface FooterProps {
   total: number;

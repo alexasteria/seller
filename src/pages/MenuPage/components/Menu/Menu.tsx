@@ -1,8 +1,8 @@
 import React, { FC } from "react";
-import ExpandableCard from "@/components/cards/ExpandableCard";
+import ExpandableCard from "@/pages/MenuPage/components/Card/ExpandableCard";
 import { MENU } from "@/data/menu";
 import { CartState, Product } from "@/types";
-import styles from "@/components/Menu.module.css";
+import styles from "@/pages/MenuPage/components/Menu/Menu.module.css";
 
 interface MenuProps {
   cart: CartState;

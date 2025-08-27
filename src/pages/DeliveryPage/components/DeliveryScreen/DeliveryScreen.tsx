@@ -1,10 +1,10 @@
 import React, { FC, useState, useEffect } from "react";
 import { DeliveryAddress, CourierService, DeliveryInfo } from "@/types";
-import DeliveryAddressForm from "@/components/DeliveryAddressForm";
-import CourierSelection from "@/components/CourierSelection";
-import CartDisplay from "@/components/CartDisplay";
+import DeliveryAddressForm from "@/pages/DeliveryPage/components/DeliveryAddressForm/DeliveryAddressForm";
+import CourierSelection from "@/pages/DeliveryPage/components/CourierSelection/CourierSelection";
+import CartDisplay from "@/pages/DeliveryPage/components/CartDisplay/CartDisplay";
 import { useCart } from "@/contexts/CartContext";
-import styles from "@/components/DeliveryScreen.module.css";
+import styles from "@/pages/DeliveryPage/components/DeliveryScreen/DeliveryScreen.module.css";
 
 interface DeliveryScreenProps {
   subtotal: number;
@@ -104,7 +104,7 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({
           </div>
           <div className={styles.summaryRow}>
             <span>Доставка курьером:</span>
-            <span>0₽</span>
+            <span>0.00₽</span>
           </div>
           {/*{selectedCourier && (*/}
           {/*  <div className="summary-row">*/}

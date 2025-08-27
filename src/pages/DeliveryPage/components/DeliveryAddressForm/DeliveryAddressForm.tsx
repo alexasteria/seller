@@ -1,6 +1,6 @@
 import React, { FC, ChangeEvent } from 'react';
 import { DeliveryAddress } from '@/types';
-import styles from '@/components/DeliveryAddressForm.module.css';
+import styles from '@/pages/DeliveryPage/components/DeliveryAddressForm/DeliveryAddressForm.module.css';
 
 interface DeliveryAddressFormProps {
   address: DeliveryAddress;

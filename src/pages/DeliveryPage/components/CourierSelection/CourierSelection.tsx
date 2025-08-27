@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { CourierService } from '@/types';
 import { COURIER_SERVICES } from '@/data/couriers';
-import styles from '@/components/CourierSelection.module.css';
+import styles from '@/pages/DeliveryPage/components/CourierSelection/CourierSelection.module.css';
 
 interface CourierSelectionProps {
   selectedCourier: CourierService | null;

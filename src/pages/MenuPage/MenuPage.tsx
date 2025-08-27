@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from '@/components/Header';
-import Menu from '@/components/Menu';
-import Footer from '@/components/Footer';
+import Header from '@/components/common/Header';
+import Menu from '@/pages/MenuPage/components/Menu/Menu';
+import Footer from '@/components/common/Footer';
 import { useCart } from '@/contexts/CartContext';
 import { useTelegramUi, useTheme } from '@/hooks/useTelegram';
 import { useThemeSync } from '@/hooks/useThemeSync';

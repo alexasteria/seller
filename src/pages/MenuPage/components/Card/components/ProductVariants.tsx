@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { ProductVariant, VariantState } from "@/types";
-import styles from '@/components/cards/components/ProductVariants.module.css';
+import styles from '@/pages/MenuPage/components/Card/components/ProductVariants.module.css';
 
 const ProductVariants: FC<{
   variants?: ProductVariant[];

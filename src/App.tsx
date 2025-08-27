@@ -5,9 +5,8 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import MenuPage from "@/pages/MenuPage";
-import DeliveryPage from "@/pages/DeliveryPage";
-import SuccessPage from "@/pages/SuccessPage";
+import MenuPage from "@/pages/MenuPage/MenuPage";
+import DeliveryPage from "@/pages/DeliveryPage/DeliveryPage";
 import { CartProvider } from "@/contexts/CartContext";
 import { ExpandedCardProvider } from "@/contexts/ExpandedCardContext";
 
@@ -19,7 +18,6 @@ const App: FC = () => {
           <Routes>
             <Route path="/" element={<MenuPage />} />
             <Route path="/delivery" element={<DeliveryPage />} />
-            <Route path="/success" element={<SuccessPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Router>

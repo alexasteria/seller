@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { Product, ProductVariant, VariantState } from "@/types";
-import ProductVariants from "@/components/cards/components/ProductVariants";
-import styles from "./CardExpandedContent.module.css";
+import ProductVariants from "@/pages/MenuPage/components/Card/components/ProductVariants";
+import styles from "@/pages/MenuPage/components/Card/CardExpandedContent.module.css";
 
 interface CardExpandedContentProps {
   item: Product;

@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { Product } from "@/types";
-import styles from "./CardHeader.module.css";
+import styles from "@/pages/MenuPage/components/Card/CardHeader.module.css";
 
 interface CardHeaderProps {
   item: Product;

@@ -1,9 +1,9 @@
 import React, { FC, useMemo, useState } from "react";
 import { Product, VariantState } from "@/types";
-import styles from "@/components/cards/ExpandableCard.module.css";
+import styles from "@/pages/MenuPage/components/Card/ExpandableCard.module.css";
+import CardHeader from "@/pages/MenuPage/components/Card/CardHeader";
+import CardExpandedContent from "@/pages/MenuPage/components/Card/CardExpandedContent";
 import { useExpandedCard } from "@/contexts/ExpandedCardContext";
-import CardHeader from "./CardHeader";
-import CardExpandedContent from "./CardExpandedContent";
 
 interface ExpandableCardProps {
   item: Product;
