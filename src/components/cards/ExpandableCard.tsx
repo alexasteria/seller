@@ -1,8 +1,9 @@
 import React, { FC, useMemo, useState } from "react";
 import { Product, VariantState } from "@/types";
 import styles from "@/components/cards/ExpandableCard.module.css";
-import ProductVariants from "@/components/cards/components/ProductVariants";
 import { useExpandedCard } from "@/contexts/ExpandedCardContext";
+import CardHeader from "./CardHeader";
+import CardExpandedContent from "./CardExpandedContent";
 
 interface ExpandableCardProps {
   item: Product;
@@ -54,115 +55,27 @@ const ExpandableCard: FC<ExpandableCardProps> = ({
         </div>
       )}
 
-      <div className={styles.cardHeader} onClick={toggleExpand}>
-        {!isExpanded && (
-          <div className={styles.cardImageContainer}>
-            {item.img && (
-              <div className={styles.cardImage}>
-                <img src={item.img} alt={item.title} loading="lazy" />
-                {Boolean(totalCount) && (
-                  <span className={styles.badge}>{totalCount}</span>
-                )}
-              </div>
-            )}
-          </div>
-        )}
-        <div className={styles.cardInfo}>
-          <h3 className={styles.cardTitle}>{item.title}</h3>
-          {!isExpanded && item.description && (
-            <p className={styles.cardDescription}>{item.description}</p>
-          )}
-          <div className={styles.cardPriceRow}>
-            <div className={styles.cardPrice}>
-              {item.discount ? (
-                <>
-                  <span className={styles.discountedPrice}>
-                    {item.variants?.length > 1 && "от "}₽
-                    {discountPrice.toFixed(2)}
-                  </span>
-                  <span className={styles.originalPrice}>
-                    ₽{price.toFixed(2)}
-                  </span>
-                </>
-              ) : (
-                `₽${price.toFixed(2)}`
-              )}
-            </div>
-            {item.discount && (
-              <div className={styles.cardDiscountBadge}>-{item.discount}%</div>
-            )}
-          </div>
-        </div>
-      </div>
+      <CardHeader
+        item={item}
+        isExpanded={isExpanded}
+        totalCount={totalCount}
+        discountPrice={discountPrice}
+        price={price}
+        toggleExpand={toggleExpand}
+      />
 
       {isExpanded && (
-        <div className={styles.cardExpandedContent}>
-          {item.description && (
-            <p className={styles.cardExpandedDescription}>{item.description}</p>
-          )}
-
-          {item.tags && (
-            <div className={styles.cardExpandedIngredients}>
-              <div className={styles.ingredientsTitle}>{item.tags.name}:</div>
-              <div className={styles.ingredientsList}>
-                {item.tags.tags.map((value, index) => (
-                  <span key={index} className={styles.ingredientItem}>
-                    {value}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {selectVariant && (
-            <ProductVariants
-              variants={item.variants}
-              setSelectVariant={setSelectVariant}
-              selected={selectVariant?.id}
-              variantState={variantState}
-            />
-          )}
-
-          <div className={styles.cardExpandedActions}>
-            {quantity > 0 ? (
-              <div className={styles.cardExpandedCounter}>
-                <button
-                  className={styles.cardExpandedBtn}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onDecrement(item, selectVariant.id);
-                  }}
-                  aria-label="Уменьшить количество"
-                >
-                  −
-                </button>
-                <span className={styles.cardExpandedQty}>{quantity}</span>
-                <button
-                  className={styles.cardExpandedBtn}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onIncrement(item, selectVariant.id);
-                  }}
-                  aria-label="Увеличить количество"
-                >
-                  +
-                </button>
-              </div>
-            ) : (
-              <button
-                className={styles.cardExpandedAddBtn}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onIncrement(item, selectVariant.id);
-                }}
-                aria-label={`Добавить ${item.title}`}
-              >
-                <span className={styles.btnText}>В корзину за</span>
-                <span className={styles.btnText}>{discountPrice} ₽</span>
-              </button>
-            )}
-          </div>
-        </div>
+        <CardExpandedContent
+          item={item}
+          variantState={variantState}
+          onIncrement={onIncrement}
+          onDecrement={onDecrement}
+          selectVariant={selectVariant}
+          setSelectVariant={setSelectVariant}
+          quantity={quantity}
+          discountPrice={discountPrice}
+          isExpanded={isExpanded}
+        />
       )}
     </div>
   );
