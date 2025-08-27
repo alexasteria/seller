@@ -1,5 +1,4 @@
 import React, { FC } from "react";
-import { useNavigate } from "react-router-dom";
 import Header from "@/components/common/Header";
 import Menu from "@/pages/MenuPage/components/Menu/Menu";
 import Footer from "@/components/common/Footer";
@@ -8,27 +7,11 @@ import { useTelegramUi, useTheme } from "@/hooks/useTelegram";
 import { useThemeSync } from "@/hooks/useThemeSync";
 
 const MenuPage: FC = () => {
-  const navigate = useNavigate();
   const { cart, total, hasItems, increment, decrement } = useCart();
   const theme = useTheme();
 
-  const handleNavigateToDelivery = () => {
-    navigate("/delivery");
-  };
-
-  const { isTelegramAvailable } = useTelegramUi(
-    cart,
-    total,
-    hasItems,
-    null,
-    handleNavigateToDelivery,
-  );
-
+  useTelegramUi();
   useThemeSync(theme);
-
-  const handleCheckout = () => {
-    navigate("/delivery");
-  };
 
   return (
     <div className="container">

@@ -1,8 +1,10 @@
 import { useEffect, useState, useCallback } from "react";
-import { CartState, OrderPayload, DeliveryInfo, OrderItem } from "@/types";
+import { OrderPayload, DeliveryInfo, OrderItem } from "@/types";
 import { MENU } from "@/data/menu";
 import { WebApp } from "telegram-web-app";
 import { useLocation } from "react-router-dom";
+import { useCart } from "@/contexts/CartContext";
+import { useNavigate } from "react-router-dom";
 
 const tg: WebApp = (window as any).Telegram?.WebApp;
 
@@ -36,82 +38,69 @@ const sendOrderToChat = (
   // }
 };
 
-export function useTelegramUi(
-  cart: CartState,
-  cartTotal: number,
-  hasItems: boolean,
-  deliveryInfo?: DeliveryInfo | null,
-  onNavigateToDelivery?: () => void,
-) {
+export function useTelegramUi() {
+  const { cart, total: cartTotal, hasItems } = useCart();
   const [isInitialized, setIsInitialized] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const location = useLocation();
-  console.log(location.pathname);
-  // Создаем стабильную функцию для обработки клика
-  const handleMainButtonClick = useCallback(() => {
-    if (location.pathname === "/delivery") {
-      // На странице доставки - подтверждаем заказ
-      setIsSubmitting(true);
+  const navigate = useNavigate();
 
-      const items: OrderItem[] = [];
-      Object.entries(cart).forEach(([productID, variantState]) => {
-        const product = MENU.find((m) => m.id === productID);
-        if (!product) return;
+  const createOrderPayload = useCallback((): OrderPayload => {
+    const items: OrderItem[] = [];
+    Object.entries(cart).forEach(([productID, variantState]) => {
+      const product = MENU.find((m) => m.id === productID);
+      if (!product) return;
 
-        Object.entries(variantState).forEach(([variantID, count]) => {
-          if (count <= 0) return; // Skip if quantity is zero or less
+      Object.entries(variantState).forEach(([variantID, count]) => {
+        if (count <= 0) return;
 
-          const variant = product.variants.find((v) => v.id === variantID);
-          if (!variant) return;
+        const variant = product.variants.find((v) => v.id === variantID);
+        if (!variant) return;
 
-          // Calculate the price for this specific variant, considering product discount
-          const basePrice = variant.cost;
-          const discountedPrice = product.discount
-            ? basePrice * (1 - product.discount / 100)
-            : basePrice;
+        const basePrice = variant.cost;
+        const discountedPrice = product.discount
+          ? basePrice * (1 - product.discount / 100)
+          : basePrice;
 
-          items.push({
-            id: product.id, // Or variant.id if each variant is a distinct order item
-            title: `${product.title} (${variant.value})`, // Include variant info in title
-            price: discountedPrice, // Price per unit of this variant
-            quantity: count,
-            description: product.description,
-          });
+        items.push({
+          id: product.id,
+          title: `${product.title} (${variant.value})`,
+          price: discountedPrice,
+          quantity: count,
+          description: product.description,
         });
       });
+    });
 
-      const payload: OrderPayload = {
-        action: "checkout",
-        items,
-        total: cartTotal,
-        currency: "USD",
-        delivery: deliveryInfo,
-        timestamp: Date.now(),
-        user: tg.initDataUnsafe?.user
-          ? {
-              id: tg.initDataUnsafe.user.id,
-              username: tg.initDataUnsafe.user.username,
-              first_name: tg.initDataUnsafe.user.first_name,
-              last_name: tg.initDataUnsafe.user.last_name,
-            }
-          : undefined,
-      };
+    return {
+      action: "checkout",
+      items,
+      total: cartTotal,
+      currency: "USD",
+      delivery: null,
+      timestamp: Date.now(),
+      user: tg.initDataUnsafe?.user
+        ? {
+            id: tg.initDataUnsafe.user.id,
+            username: tg.initDataUnsafe.user.username,
+            first_name: tg.initDataUnsafe.user.first_name,
+            last_name: tg.initDataUnsafe.user.last_name,
+          }
+        : undefined,
+    };
+  }, [cart, cartTotal]);
 
+  const submitOrder = useCallback(
+    (payload: OrderPayload) => {
+      setIsSubmitting(true);
       try {
-        // Отправляем данные в бота
         tg.sendData(JSON.stringify(payload));
-
-        // Отправляем красивое сообщение в чат
-        sendOrderToChat(payload, deliveryInfo);
-
-        // Показываем успешное состояние
+        sendOrderToChat(payload, null);
         tg.MainButton.setParams({
           text: "✅ Заказ отправлен!",
           color: "#28a745",
           text_color: "#ffffff",
         });
-
-        // Закрываем Web App после успешной отправки
         setTimeout(() => {
           try {
             tg.close();
@@ -123,16 +112,21 @@ export function useTelegramUi(
         setIsSubmitting(false);
         tg.showAlert("Ошибка отправки заказа. Попробуйте еще раз.");
       }
-    } else if (location.pathname === "/" && onNavigateToDelivery) {
-      // На главной странице - переходим к доставке
-      onNavigateToDelivery();
-    }
-  }, [cart, cartTotal, location, deliveryInfo, onNavigateToDelivery]);
+    },
+    [setIsSubmitting],
+  );
 
-  // Инициализация Telegram Web App
+  const handleMainButtonClick = useCallback(() => {
+    if (location.pathname === "/delivery") {
+      const payload = createOrderPayload();
+      submitOrder(payload);
+    } else if (location.pathname === "/") {
+      navigate("/delivery");
+    }
+  }, [location, navigate, createOrderPayload, submitOrder]);
+
   useEffect(() => {
     if (!tg) return;
-
     try {
       tg.ready();
       tg.expand();
@@ -142,54 +136,59 @@ export function useTelegramUi(
     }
   }, []);
 
-  // Управление MainButton
+  const getMainButtonState = () => {
+    const { pathname } = location;
+    const buttonColor = tg.themeParams.button_color || "#2481cc";
+
+    if (pathname === "/delivery") {
+      // if (!deliveryInfo) {
+      //   return {
+      //     text: "Заполните адрес и выберите курьера",
+      //     show: false,
+      //     color: buttonColor,
+      //   };
+      // }
+      if (isSubmitting) {
+        return {
+          text: "📤 Отправляем заказ...",
+          show: true,
+          color: "#6c757d",
+        };
+      }
+      return {
+        text: `Оплатить · ${cartTotal.toFixed(2)}₽`,
+        show: true,
+        color: buttonColor,
+      };
+    }
+
+    if (pathname === "/") {
+      return {
+        text: hasItems
+          ? `Перейти к доставке · ${cartTotal.toFixed(2)}₽`
+          : "Выберите товары",
+        show: hasItems,
+        color: buttonColor,
+      };
+    }
+
+    return { text: "", show: false, color: buttonColor };
+  };
+
   useEffect(() => {
     if (!tg || !isInitialized) return;
 
-    let buttonText = "";
-    let shouldShow = false;
-    let buttonColor = tg.themeParams.button_color || "#2481cc";
-    let textColor = tg.themeParams.button_text_color || "#ffffff";
-
-    if (location.pathname === "/delivery") {
-      // На странице доставки показываем кнопку подтверждения
-      if (isSubmitting) {
-        buttonText = "📤 Отправляем заказ...";
-        buttonColor = "#6c757d";
-      } else {
-        buttonText = `Оплатить · ${cartTotal.toFixed(2)}₽`;
-        buttonColor = tg.themeParams.button_color || "#2481cc";
-      }
-      shouldShow = true;
-      // if (deliveryInfo) {
-      //   if (isSubmitting) {
-      //     buttonText = "📤 Отправляем заказ...";
-      //     buttonColor = "#6c757d";
-      //   } else {
-      //     buttonText = `Оплатить · ₽${deliveryInfo.totalWithDelivery.toFixed(2)}`;
-      //     buttonColor = tg.themeParams.button_color || "#2481cc";
-      //   }
-      //   shouldShow = true;
-      // } else {
-      //   buttonText = "Заполните адрес и выберите курьера";
-      //   shouldShow = false;
-      // }
-    } else if (location.pathname === "/") {
-      // На главной странице показываем кнопку перехода к доставке
-      buttonText = hasItems
-        ? `Перейти к доставке · ${cartTotal.toFixed(2)}₽`
-        : "Выберите товары";
-      shouldShow = hasItems;
-    }
+    const { text, show, color } = getMainButtonState();
+    const textColor = tg.themeParams.button_text_color || "#ffffff";
 
     try {
       tg.MainButton.setParams({
-        text: buttonText,
-        color: buttonColor,
+        text,
+        color,
         text_color: textColor,
       });
 
-      if (shouldShow) {
+      if (show) {
         tg.MainButton.show();
       } else {
         tg.MainButton.hide();
@@ -197,25 +196,15 @@ export function useTelegramUi(
     } catch (error) {
       // Игнорируем ошибки MainButton
     }
-  }, [
-    cartTotal,
-    hasItems,
-    isInitialized,
-    location,
-    deliveryInfo,
-    isSubmitting,
-  ]);
+  }, [cartTotal, hasItems, isInitialized, location, isSubmitting]);
 
-  // Обработчик клика MainButton
   useEffect(() => {
     if (!tg || !isInitialized) return;
-
     try {
       tg.MainButton.onClick(handleMainButtonClick);
     } catch (error) {
       // Игнорируем ошибки обработчика
     }
-
     return () => {
       if (tg) {
         try {

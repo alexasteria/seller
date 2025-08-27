@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import DeliveryScreen from "@/pages/DeliveryPage/components/DeliveryScreen/DeliveryScreen";
 import { useCart } from "@/contexts/CartContext";
@@ -8,16 +8,10 @@ import { DeliveryInfo } from "@/types";
 
 const DeliveryPage: FC = () => {
   const navigate = useNavigate();
-  const { cart, total } = useCart();
+  const { total, setDeliveryInfo } = useCart();
   const theme = useTheme();
-  const [deliveryInfo, setDeliveryInfo] = useState<DeliveryInfo | null>(null);
 
-  const { isTelegramAvailable, isInitialized, platform } = useTelegramUi(
-    cart,
-    total,
-    true,
-    deliveryInfo,
-  );
+  useTelegramUi();
   useThemeSync(theme);
 
   const handleBack = () => {

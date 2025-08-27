@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useMemo, useState } from "react";
-import { CartState, Product } from "@/types";
+import { CartState, Product, DeliveryInfo } from "@/types";
 import { MENU } from "@/data/menu";
 
 interface CartContextType {
@@ -10,6 +10,8 @@ interface CartContextType {
   decrement: (product: Product, variantID: string) => void;
   clearCart: () => void;
   cartMap: Map<string, Product>;
+  deliveryInfo: DeliveryInfo | null;
+  setDeliveryInfo: React.Dispatch<React.SetStateAction<DeliveryInfo | null>>;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -17,6 +19,8 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<CartState>({});
   const [cartMap, setCartMap] = useState<Map<string, Product>>(new Map());
+  const [deliveryInfo, setDeliveryInfo] = useState<DeliveryInfo | null>(null);
+
   const total = useMemo(
     () =>
       Object.entries(cart).reduce((sum, [id, variantState]) => {
@@ -79,6 +83,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     decrement,
     clearCart,
     cartMap,
+    deliveryInfo,
+    setDeliveryInfo,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
