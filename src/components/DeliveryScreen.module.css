@@ -108,3 +108,22 @@
 .active:hover {
   opacity: 0.9;
 }
+
+.orderConfirmationInfo {
+  background: var(--sec-bg);
+  border-radius: 12px;
+  padding: 16px;
+  margin: 16px;
+  text-align: center;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.orderConfirmationInfo p {
+  margin-bottom: 8px;
+}
+
+.orderConfirmationInfo p:last-child {
+  margin-bottom: 0;
+}

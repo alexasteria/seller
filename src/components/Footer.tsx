@@ -1,5 +1,5 @@
-import React, { FC } from 'react';
-import styles from '@/components/Footer.module.css';
+import React, { FC } from "react";
+import styles from "@/components/Footer.module.css";
 
 interface FooterProps {
   total: number;
@@ -10,7 +10,7 @@ const Footer: FC<FooterProps> = ({ total }) => {
     <footer className={styles.footer}>
       <div className={styles.summary}>
         <span>Итого</span>
-        <strong>₽{total.toFixed(2)}</strong>
+        <strong>{total.toFixed(2)}₽</strong>
       </div>
     </footer>
   );
