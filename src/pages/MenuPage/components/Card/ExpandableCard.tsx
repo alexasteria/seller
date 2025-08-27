@@ -23,7 +23,8 @@ const ExpandableCard: FC<ExpandableCardProps> = ({
   const [selectVariant, setSelectVariant] = useState(item.variants[0]);
 
   const price = useMemo(() => {
-    return selectVariant?.cost ?? 99999;
+    if (!selectVariant) throw Error("не выбра вариант");
+    return selectVariant.cost;
   }, [selectVariant]);
 
   const discountPrice = useMemo(() => {

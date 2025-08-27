@@ -95,19 +95,18 @@ export function useTelegramUi() {
       setIsSubmitting(true);
       try {
         tg.sendData(JSON.stringify(payload));
-        sendOrderToChat(payload, null);
-        tg.MainButton.setParams({
-          text: "✅ Заказ отправлен!",
-          color: "#28a745",
-          text_color: "#ffffff",
-        });
-        setTimeout(() => {
-          try {
-            tg.close();
-          } catch (error) {
-            setIsSubmitting(false);
-          }
-        }, 1000);
+        // tg.MainButton.setParams({
+        //   text: "✅ Заказ отправлен!",
+        //   color: "#28a745",
+        //   text_color: "#ffffff",
+        // });
+        // setTimeout(() => {
+        //   try {
+        //     tg.close();
+        //   } catch (error) {
+        //     setIsSubmitting(false);
+        //   }
+        // }, 1000);
       } catch (error) {
         setIsSubmitting(false);
         tg.showAlert("Ошибка отправки заказа. Попробуйте еще раз.");
