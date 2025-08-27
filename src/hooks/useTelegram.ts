@@ -46,9 +46,10 @@ export function useTelegramUi(
   const [isInitialized, setIsInitialized] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const location = useLocation();
+  console.log(location.pathname);
   // Создаем стабильную функцию для обработки клика
   const handleMainButtonClick = useCallback(() => {
-    if (location.pathname === "delivery") {
+    if (location.pathname === "/delivery") {
       // На странице доставки - подтверждаем заказ
       setIsSubmitting(true);
 
@@ -122,7 +123,7 @@ export function useTelegramUi(
         setIsSubmitting(false);
         tg.showAlert("Ошибка отправки заказа. Попробуйте еще раз.");
       }
-    } else if (location.pathname === "menu" && onNavigateToDelivery) {
+    } else if (location.pathname === "/" && onNavigateToDelivery) {
       // На главной странице - переходим к доставке
       onNavigateToDelivery();
     }
@@ -150,7 +151,7 @@ export function useTelegramUi(
     let buttonColor = tg.themeParams.button_color || "#2481cc";
     let textColor = tg.themeParams.button_text_color || "#ffffff";
 
-    if (location.pathname === "delivery") {
+    if (location.pathname === "/delivery") {
       // На странице доставки показываем кнопку подтверждения
       if (isSubmitting) {
         buttonText = "📤 Отправляем заказ...";
@@ -173,7 +174,7 @@ export function useTelegramUi(
       //   buttonText = "Заполните адрес и выберите курьера";
       //   shouldShow = false;
       // }
-    } else if (location.pathname === "menu") {
+    } else if (location.pathname === "/") {
       // На главной странице показываем кнопку перехода к доставке
       buttonText = hasItems
         ? `Перейти к доставке · ${cartTotal.toFixed(2)}₽`
