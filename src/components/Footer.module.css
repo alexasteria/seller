@@ -1,0 +1,25 @@
+.footer {
+  position: sticky;
+  bottom: 0;
+  background: var(--bg);
+  padding: 16px;
+  border-top: 1px solid var(--sec-bg);
+  margin-top: auto;
+}
+
+.summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: var(--sec-bg);
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.summary strong {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+}
