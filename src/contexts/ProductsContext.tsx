@@ -376,15 +376,17 @@ const ProductsContext = createContext<ProductsContextType | undefined>(
 
 export function ProductsProvider({ children }: { children: React.ReactNode }) {
   const [products, setProducts] = useState<Product[]>(prod);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const fetchProducts = useCallback(async () => {
     const api = new Api({ baseURL: "/api" });
     const items = await api.products.productsList({
       tenant: "SELL_DEPARTMENT",
     }); //todo add from tg bot
-    setProducts(items.data as Product[]); //todo id type
-    setIsLoading(false);
+    if (items.data) {
+      setProducts(items.data as Product[]); //todo id type
+    }
+    //setIsLoading(false);
   }, []);
 
   useEffect(() => {
