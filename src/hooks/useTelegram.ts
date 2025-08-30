@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { OrderPayload } from "@/types";
 import { Api } from "@/backendApi";
 import { useProducts } from "@/contexts/ProductsContext";
+import { useUser } from "@/contexts/UserContext.tsx";
 
 const tg: WebApp = (window as any).Telegram?.WebApp;
 
@@ -112,7 +113,9 @@ export function useTelegramUi() {
     [setIsSubmitting],
   );
   const { products } = useProducts();
+  const { user } = useUser();
   const createOrder: () => OrderPayload = useCallback(() => {
+    if (!user) throw Error("user not found");
     const cartTemp: OrderPayload["cart"] = [];
     Object.entries(cart).forEach(([productID, variantState]) => {
       const product = products.find((m) => m.id === productID);
@@ -137,7 +140,7 @@ export function useTelegramUi() {
       });
     });
     return {
-      userID: 1, //todo
+      userID: user.id,
       cart: cartTemp,
     };
   }, []);
