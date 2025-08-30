@@ -51,20 +51,20 @@ export type OrderItem = {
   description?: string;
 };
 
-export type OrderPayload = {
-  action: "checkout";
-  items: OrderItem[];
-  total: number;
-  currency: string;
-  delivery?: DeliveryInfo | null;
-  timestamp?: number;
-  user?: {
-    id?: number;
-    username?: string;
-    first_name?: string;
-    last_name?: string;
-  };
-};
+// export type OrderPayload = {
+//   action: "checkout";
+//   items: OrderItem[];
+//   total: number;
+//   currency: string;
+//   delivery?: DeliveryInfo | null;
+//   timestamp?: number;
+//   user?: {
+//     id?: number;
+//     username?: string;
+//     first_name?: string;
+//     last_name?: string;
+//   };
+// };
 
 export type DeliveryAddress = {
   city: string;
@@ -88,4 +88,14 @@ export type DeliveryInfo = {
   address: DeliveryAddress;
   courier: CourierService;
   totalWithDelivery: number;
+};
+
+export type OrderPayload = {
+  userID: number;
+  cart: {
+    productID: string;
+    variantID: string;
+    quantity: number;
+    price: number;
+  }[];
 };

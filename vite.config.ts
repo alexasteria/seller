@@ -5,7 +5,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      "@/*": "./src/*",
+      "@": "/src",
     },
   },
   // Set base path for GitHub Pages when building in CI
@@ -15,6 +15,14 @@ export default defineConfig({
     ? `/${process.env.GITHUB_REPOSITORY.split("/")[1]}/`
     : "/",
   server: {
-    allowedHosts: ["slow-ideas-hide.loca.lt", "localhost"],
+    proxy: {
+      "/api": {
+        target: "http://localhost:8085",
+        rewrite: (path) => path.replace(/^\/api/, ""),
+        changeOrigin: true,
+        secure: false,
+        ws: true,
+      },
+    },
   },
 });

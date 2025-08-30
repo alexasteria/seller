@@ -67,7 +67,7 @@ npm run preview
     ```bash
     docker-compose up -d --build
     ```
-    Приложение будет доступно по адресу `http://localhost:8080`.
+    Приложение будет доступно по адресу `http://localhost:8085`.
 
 3.  **Остановка контейнеров:**
     ```bash

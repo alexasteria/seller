@@ -1,11 +1,10 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import path from 'path';
 export default defineConfig({
     plugins: [react()],
     resolve: {
         alias: {
-            '@': path.resolve(__dirname, 'src'),
+            "@": "/src",
         },
     },
     // Set base path for GitHub Pages when building in CI
@@ -15,6 +14,14 @@ export default defineConfig({
         ? "/".concat(process.env.GITHUB_REPOSITORY.split("/")[1], "/")
         : "/",
     server: {
-        allowedHosts: ["slow-ideas-hide.loca.lt", "localhost"],
+        proxy: {
+            "/api": {
+                target: "http://localhost:8085",
+                rewrite: function (path) { return path.replace(/^\/api/, ""); },
+                changeOrigin: true,
+                secure: false,
+                ws: true,
+            },
+        },
     },
 });

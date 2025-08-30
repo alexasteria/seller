@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useMemo, useState } from "react";
 import { CartState, Product, DeliveryInfo } from "@/types";
-import { MENU } from "@/data/menu";
+import { useProducts } from "@/contexts/ProductsContext";
 
 interface CartContextType {
   cart: CartState;
@@ -20,11 +20,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<CartState>({});
   const [cartMap, setCartMap] = useState<Map<string, Product>>(new Map());
   const [deliveryInfo, setDeliveryInfo] = useState<DeliveryInfo | null>(null);
+  const { products } = useProducts();
 
   const total = useMemo(
     () =>
       Object.entries(cart).reduce((sum, [id, variantState]) => {
-        const item = MENU.find((m) => m.id === id);
+        const item = products.find((m) => m.id === id);
         if (!item) return sum;
         let currentItemPrice = 0;
         Object.entries(variantState).forEach(([variantID, count]) => {
@@ -38,7 +39,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         });
         return sum + currentItemPrice;
       }, 0) / 100,
-    [cart],
+    [cart, products],
   );
 
   const hasItems = total > 0.009;

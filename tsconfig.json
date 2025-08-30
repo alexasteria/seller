@@ -14,6 +14,7 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
+    "allowImportingTsExtensions": true,
     "types": ["@twa-dev/types"],
     "baseUrl": ".",
     "paths": {
