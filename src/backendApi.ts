@@ -66,6 +66,10 @@ export interface ModelsTgBotUser {
   username?: string;
 }
 
+export interface ModelsUpdateOrderStatusRequest {
+  status?: string;
+}
+
 import type {
   AxiosInstance,
   AxiosRequestConfig,
@@ -293,6 +297,28 @@ export class Api<
         method: "POST",
         query: query,
         body: order,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Update the status of an existing order.
+     *
+     * @tags orders
+     * @name StatusUpdate
+     * @summary Update order status
+     * @request PUT:/orders/{id}/status
+     */
+    statusUpdate: (
+      id: number,
+      status: ModelsUpdateOrderStatusRequest,
+      params: RequestParams = {},
+    ) =>
+      this.request<string, string>({
+        path: `/orders/${id}/status`,
+        method: "PUT",
+        body: status,
         type: ContentType.Json,
         format: "json",
         ...params,
