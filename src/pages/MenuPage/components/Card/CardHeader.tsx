@@ -50,7 +50,7 @@ const CardHeader: FC<CardHeaderProps> = ({
               <span className={styles.originalPrice}>{price.toFixed(2)}₽</span>
             )}
           </div>
-          {item.discount && (
+          {Boolean(item.discount) && (
             <div className={styles.cardDiscountBadge}>-{item.discount}%</div>
           )}
         </div>
