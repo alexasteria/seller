@@ -3,41 +3,11 @@ import { WebApp } from "telegram-web-app";
 import { useLocation } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
 import { useNavigate } from "react-router-dom";
-import { OrderPayload } from "@/types";
 import { useProducts } from "@/contexts/ProductsContext";
 import { useUser } from "@/contexts/UserContext.tsx";
+import { Api, ModelsCreateOrderRequest } from "@/backendApi.ts";
 
 const tg: WebApp = (window as any).Telegram?.WebApp;
-
-// Функция для отправки заказа в чат и боту
-// const sendOrderToChat = (
-//   payload: OrderPayload,
-//   deliveryInfo?: DeliveryInfo | null,
-// ) => {
-//const items = payload.items;
-// Создаем красивое сообщение для чата
-// let orderSummary = `🍕 *Новый заказ!*\n\n${items
-//   .map(
-//     (item) =>
-//       `• ${item.title} x${item.quantity} - $${(item.price * item.quantity).toFixed(2)}`,
-//   )
-//   .join("\n")}`;
-// if (deliveryInfo) {
-//   orderSummary += `\n\n📍 *Адрес доставки:*\n${deliveryInfo.address.city}, ${deliveryInfo.address.street}, ${deliveryInfo.address.house}${deliveryInfo.address.apartment ? `, кв. ${deliveryInfo.address.apartment}` : ""}\n\n🚚 *Курьер:* ${deliveryInfo.courier.name} (${deliveryInfo.courier.time})\n\n💰 *Итого к оплате:* $${deliveryInfo.totalWithDelivery.toFixed(2)}`;
-// }
-// Показываем popup с информацией о заказе
-// try {
-//   const popupMessage = `Заказ успешно оформлен!\n\nСумма: $${deliveryInfo?.totalWithDelivery.toFixed(2)}\nКурьер: ${deliveryInfo.courier.name}\n\nОжидайте подтверждения от ресторана.`;
-//   tg.showPopup({
-//     title: "✅ Заказ принят!",
-//     message: popupMessage,
-//     buttons: [{ type: "ok", text: "Понятно" }],
-//   });
-// } catch (error) {
-//   // Fallback к alert
-//   tg.showAlert(orderSummary);
-// }
-// };
 
 export function useTelegramUi() {
   const { cart, total: cartTotal, hasItems } = useCart();
@@ -46,56 +16,13 @@ export function useTelegramUi() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // const createOrderPayload = useCallback((): OrderPayload => {
-  //   const items: OrderItem[] = [];
-  //   Object.entries(cart).forEach(([productID, variantState]) => {
-  //     const product = MENU.find((m) => m.id === productID);
-  //     if (!product) return;
-  //
-  //     Object.entries(variantState).forEach(([variantID, count]) => {
-  //       if (count <= 0) return;
-  //
-  //       const variant = product.variants.find((v) => v.id === variantID);
-  //       if (!variant) return;
-  //
-  //       const basePrice = variant.cost;
-  //       const discountedPrice = product.discount
-  //         ? basePrice * (1 - product.discount / 100)
-  //         : basePrice;
-  //
-  //       items.push({
-  //         id: product.id,
-  //         title: `${product.title} (${variant.value})`,
-  //         price: discountedPrice,
-  //         quantity: count,
-  //         description: product.description,
-  //       });
-  //     });
-  //   });
-  //
-  //   return {
-  //     action: "checkout",
-  //     items,
-  //     total: cartTotal,
-  //     currency: "USD",
-  //     delivery: null,
-  //     timestamp: Date.now(),
-  //     user: tg.initDataUnsafe?.user
-  //       ? {
-  //           id: tg.initDataUnsafe.user.id,
-  //           username: tg.initDataUnsafe.user.username,
-  //           first_name: tg.initDataUnsafe.user.first_name,
-  //           last_name: tg.initDataUnsafe.user.last_name,
-  //         }
-  //       : undefined,
-  //   };
-  // }, [cart, cartTotal]);
-
   const submitOrder = useCallback(
-    (payload: OrderPayload) => {
+    async (payload: ModelsCreateOrderRequest) => {
+      const api = new Api({ baseURL: "/api" });
       setIsSubmitting(true);
       try {
-        tg.sendData(JSON.stringify(payload));
+        //tg.sendData(JSON.stringify(payload));
+        await api.orders.ordersCreate({ tenant: "SELL_DEPARTMENT" }, payload);
         setTimeout(() => {
           try {
             tg.close();
@@ -112,9 +39,12 @@ export function useTelegramUi() {
   );
   const { products } = useProducts();
   const { user } = useUser();
-  const createOrder: () => OrderPayload = useCallback(() => {
+  const createOrder: () => ModelsCreateOrderRequest = useCallback(() => {
     if (!user) throw Error("user not found");
-    const cartTemp: OrderPayload["cart"] = [];
+    if (!tg.initDataUnsafe?.chat) {
+      throw new Error("Telegram chat data is not available.");
+    }
+    const cartTemp: ModelsCreateOrderRequest["cart"] = [];
     Object.entries(cart).forEach(([productID, variantState]) => {
       const product = products.find((m) => m.id === productID);
       if (!product) return;
@@ -141,10 +71,11 @@ export function useTelegramUi() {
       });
     });
     return {
+      chatID: tg.initDataUnsafe.chat.id,
       userID: user.id,
       cart: cartTemp,
     };
-  }, []);
+  }, [cart, products, user]);
 
   const handleMainButtonClick = useCallback(() => {
     if (location.pathname === "/delivery") {
@@ -153,7 +84,7 @@ export function useTelegramUi() {
     } else if (location.pathname === "/") {
       navigate("/delivery");
     }
-  }, [location, navigate]);
+  }, [location, navigate, createOrder, submitOrder]);
 
   useEffect(() => {
     if (!tg) return;

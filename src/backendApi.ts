@@ -19,6 +19,7 @@ export interface ModelsCartItem {
 
 export interface ModelsCreateOrderRequest {
   cart: ModelsCartItem[];
+  chatID: number;
   userID: number;
 }
 
