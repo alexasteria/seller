@@ -7,7 +7,7 @@ import React, {
   useCallback,
 } from "react";
 import { Product } from "@/types";
-import { Api } from "@/backendApi";
+import { Api, ModelsProduct } from "@/backendApi";
 
 const prod = [
   {
@@ -366,7 +366,7 @@ const prod = [
   },
 ];
 interface ProductsContextType {
-  products: Product[];
+  products: ModelsProduct[];
   isLoading: boolean;
 }
 
@@ -375,7 +375,7 @@ const ProductsContext = createContext<ProductsContextType | undefined>(
 );
 
 export function ProductsProvider({ children }: { children: React.ReactNode }) {
-  const [products, setProducts] = useState<Product[]>(prod);
+  const [products, setProducts] = useState<ModelsProduct[]>(prod);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const fetchProducts = useCallback(async () => {
@@ -384,7 +384,7 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
       tenant: "SELL_DEPARTMENT",
     }); //todo add from tg bot
     if (items.data) {
-      setProducts(items.data as Product[]); //todo id type
+      setProducts(items.data); //todo id type
     }
     //setIsLoading(false);
   }, []);

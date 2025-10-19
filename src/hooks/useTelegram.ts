@@ -1,11 +1,9 @@
 import { useEffect, useState, useCallback } from "react";
-import { MENU } from "@/data/menu";
 import { WebApp } from "telegram-web-app";
 import { useLocation } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
 import { useNavigate } from "react-router-dom";
 import { OrderPayload } from "@/types";
-import { Api } from "@/backendApi";
 import { useProducts } from "@/contexts/ProductsContext";
 import { useUser } from "@/contexts/UserContext.tsx";
 
@@ -124,10 +122,11 @@ export function useTelegramUi() {
       Object.entries(variantState).forEach(([variantID, count]) => {
         if (count <= 0) return;
 
-        const variant = product.variants.find((v) => v.id === variantID);
+        const variant = product.variants?.find((v) => v.id === variantID);
         if (!variant) return;
 
         const basePrice = variant.cost;
+        if (!basePrice) throw Error("basePrice is undefined");
         const discountedPrice = product.discount
           ? basePrice * (1 - product.discount / 100)
           : basePrice;
