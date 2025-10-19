@@ -2,10 +2,11 @@ import React, { FC } from "react";
 import ExpandableCard from "@/pages/MenuPage/components/Card/ExpandableCard";
 import { CartState, Product } from "@/types";
 import styles from "@/pages/MenuPage/components/Menu/Menu.module.css";
+import { ModelsProduct } from "@/backendApi.ts";
 
 interface MenuProps {
   cart: CartState;
-  products: Product[];
+  products: ModelsProduct[];
   onIncrement: (product: Product, variantID: string) => void;
   onDecrement: (product: Product, variantID: string) => void;
 }

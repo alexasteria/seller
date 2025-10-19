@@ -4,9 +4,10 @@ import styles from "@/pages/MenuPage/components/Card/ExpandableCard.module.css";
 import CardHeader from "@/pages/MenuPage/components/Card/CardHeader";
 import CardExpandedContent from "@/pages/MenuPage/components/Card/CardExpandedContent";
 import { useExpandedCard } from "@/contexts/ExpandedCardContext";
+import { ModelsProduct } from "@/backendApi.ts";
 
 interface ExpandableCardProps {
-  item: Product;
+  item: ModelsProduct;
   variantState?: VariantState;
   onIncrement: (product: Product, variantID: string) => void;
   onDecrement: (product: Product, variantID: string) => void;

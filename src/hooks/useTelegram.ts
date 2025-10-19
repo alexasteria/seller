@@ -130,6 +130,8 @@ export function useTelegramUi() {
         const discountedPrice = product.discount
           ? basePrice * (1 - product.discount / 100)
           : basePrice;
+        if (!product.id || !variant.id)
+          throw Error("!product.id || !variant.id");
         cartTemp.push({
           productID: product.id,
           variantID: variant.id,

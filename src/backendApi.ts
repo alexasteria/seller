@@ -11,47 +11,47 @@
  */
 
 export interface ModelsCartItem {
-  price?: number;
-  productID?: string;
-  quantity?: number;
-  variantID?: string;
+  price: number;
+  productID: string;
+  quantity: number;
+  variantID: string;
 }
 
 export interface ModelsCreateOrderRequest {
-  cart?: ModelsCartItem[];
-  userID?: number;
+  cart: ModelsCartItem[];
+  userID: number;
 }
 
 export interface ModelsOrder {
-  created_at?: string;
-  id?: number;
-  status?: string;
-  tenant_id?: string;
-  total_amount?: number;
-  updated_at?: string;
-  user_id?: number;
+  created_at: string;
+  id: number;
+  status: string;
+  tenant_id: string;
+  total_amount: number;
+  updated_at: string;
+  user_id: number;
 }
 
 export interface ModelsProduct {
   description?: string;
   discount?: number;
-  id?: string;
+  id: string;
   img?: string;
   tags?: ModelsProductTagGroup;
-  title?: string;
-  variants?: ModelsProductVariant[];
+  title: string;
+  variants: ModelsProductVariant[];
 }
 
 export interface ModelsProductTagGroup {
-  name?: string;
-  tags?: string[];
+  name: string;
+  tags: string[];
 }
 
 export interface ModelsProductVariant {
-  cost?: number;
-  id?: string;
-  stock?: number;
-  value?: string;
+  cost: number;
+  id: string;
+  stock: number;
+  value: string;
 }
 
 export interface ModelsTgBotUser {
@@ -67,7 +67,7 @@ export interface ModelsTgBotUser {
 }
 
 export interface ModelsUpdateOrderStatusRequest {
-  status?: string;
+  status: string;
 }
 
 import type {
@@ -134,7 +134,7 @@ export class HttpClient<SecurityDataType = unknown> {
   }: ApiConfig<SecurityDataType> = {}) {
     this.instance = axios.create({
       ...axiosConfig,
-      baseURL: axiosConfig.baseURL || "//localhost:8080",
+      baseURL: axiosConfig.baseURL || "//localhost:8085",
     });
     this.secure = secure;
     this.format = format;
@@ -248,7 +248,7 @@ export class HttpClient<SecurityDataType = unknown> {
 /**
  * @title SellerGo API
  * @version 1.0
- * @baseUrl //localhost:8080
+ * @baseUrl //localhost:8085
  * @contact
  *
  * This is a sample API for managing users.
