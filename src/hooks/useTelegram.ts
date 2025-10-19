@@ -15,10 +15,10 @@ export function useTelegramUi() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const api = new Api({ baseURL: "/api" });
 
   const submitOrder = useCallback(
     async (payload: ModelsCreateOrderRequest) => {
-      const api = new Api({ baseURL: "/api" });
       setIsSubmitting(true);
       try {
         //tg.sendData(JSON.stringify(payload));
@@ -77,10 +77,10 @@ export function useTelegramUi() {
     };
   }, [cart, products, user]);
 
-  const handleMainButtonClick = useCallback(() => {
+  const handleMainButtonClick = useCallback(async () => {
     if (location.pathname === "/delivery") {
       const payload = createOrder();
-      submitOrder(payload);
+      await submitOrder(payload);
     } else if (location.pathname === "/") {
       navigate("/delivery");
     }
